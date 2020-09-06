@@ -23,8 +23,8 @@ public class IntSet {
 	 * @post getCount() == 0
 	 * @post getCapacity() == capacity
 	 */
-	public IntSet(int capacity) throws Exception{
-		if (capacity < 0) throw new Exception();
+	public IntSet(int capacity) throws IllegalArgumentException {
+		if (capacity < 0) throw new IllegalArgumentException("capacity of a set must be bigger or equal to 0");
 		set = new ArrayList<>();
 		this.capacity = capacity;
 		count = 0;
@@ -59,15 +59,11 @@ public class IntSet {
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount() + 1)
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount())
 	 */
-	public void add(int value) throws Exception {
-		if (!has(value)) {
-			if (count < capacity) {
-				set.add(value);
-				count++;
-			}
-			else throw new Exception();
+	public void add(int value) {
+		if (!has(value) && count < capacity) {
+			set.add(value);
+			count++;
 		}
-		else throw new Exception();
 	}
 
 	/**
@@ -77,7 +73,7 @@ public class IntSet {
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount() - 1)
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount())
 	 */
-	public void remove(int value) throws Exception{
+	public void remove(int value) {
 		for (Integer i: set) {
 			if (i == value) {
 				set.remove(i);
@@ -85,7 +81,6 @@ public class IntSet {
 				return;
 			}
 		}
-		throw new Exception();
 	}
 
 	/**
@@ -98,16 +93,19 @@ public class IntSet {
 	 * @post forall int v: (has(v) and other.has(v)) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) and other.has(v))
 	 */
-	public IntSet intersect(IntSet other) throws Exception {
-		ArrayList<Integer> intersection = new ArrayList<>();
-		for (Integer i: set) {
-			if (other.has(i)) intersection.add(i);
+	public IntSet intersect(IntSet other) throws IllegalArgumentException {
+		if (other != null) {
+			ArrayList<Integer> intersection = new ArrayList<>();
+			for (Integer i : set) {
+				if (other.has(i)) intersection.add(i);
+			}
+			IntSet newSet = new IntSet(intersection.size());
+			for (Integer i : intersection) {
+				newSet.add(i);
+			}
+			return newSet;
 		}
-		IntSet newSet = new IntSet(intersection.size());
-		for (Integer i: intersection) {
-			newSet.add(i);
-		}
-		return newSet;
+		return null;
 	}
 
 	/**
@@ -121,46 +119,55 @@ public class IntSet {
 	 * @post forall int v: other.has(v) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) or other.has(v))
 	 */
-	public IntSet union(IntSet other) throws Exception {
-		ArrayList<Integer> uni = new ArrayList<>();
-		for (Integer i: set) {
-			uni.add(i);
+	public IntSet union(IntSet other) throws IllegalArgumentException {
+		if (other != null) {
+			ArrayList<Integer> uni = new ArrayList<>();
+			for (Integer i: set) {
+				uni.add(i);
+			}
+			return getIntSet(other, uni);
 		}
-		for (Integer i: other.getSet()) {
-			if (!has(i)) uni.add(i);
-		}
-		IntSet newSet = new IntSet(uni.size());
-		for (Integer i: uni) {
-			newSet.add(i);
-		}
-		return newSet;
+		return null;
 	}
 
-	public IntSet symmetricDifference(IntSet other) throws Exception {
-		ArrayList<Integer> diff = new ArrayList<>();
-		for (Integer i: set) {
-			if (!other.has(i)) diff.add(i);
+	private IntSet getIntSet(IntSet other, ArrayList<Integer> uni) throws IllegalArgumentException {
+		if (other != null) {
+			for (Integer i : other.getSet()) {
+				if (!has(i)) uni.add(i);
+			}
+			IntSet newSet = new IntSet(uni.size());
+			for (Integer i : uni) {
+				newSet.add(i);
+			}
+			return newSet;
 		}
-		for (Integer i: other.getSet()) {
-			if (!has(i)) diff.add(i);
-		}
-		IntSet newSet = new IntSet(diff.size());
-		for (Integer i: diff) {
-			newSet.add(i);
-		}
-		return newSet;
+		return null;
 	}
 
-	public IntSet difference(IntSet other) throws Exception {
-		ArrayList<Integer> diff = new ArrayList<>();
-		for (Integer i: set) {
-			if (!other.has(i)) diff.add(i);
+	public IntSet symmetricDifference(IntSet other) throws IllegalArgumentException {
+		if (other != null) {
+			ArrayList<Integer> diff = new ArrayList<>();
+			for (Integer i: set) {
+				if (!other.has(i)) diff.add(i);
+			}
+			return getIntSet(other, diff);
 		}
-		IntSet newSet = new IntSet(diff.size());
-		for (Integer i: diff) {
-			newSet.add(i);
+		return null;
+	}
+
+	public IntSet difference(IntSet other) throws IllegalArgumentException {
+		if (other != null) {
+			ArrayList<Integer> diff = new ArrayList<>();
+			for (Integer i: set) {
+				if (!other.has(i)) diff.add(i);
+			}
+			IntSet newSet = new IntSet(diff.size());
+			for (Integer i: diff) {
+				newSet.add(i);
+			}
+			return newSet;
 		}
-		return newSet;
+		return null;
 	}
 
 	/**
@@ -208,6 +215,7 @@ public class IntSet {
 			output += i;
 			first = false;
 		}
+		output += "}";
 		return output;
 	}
 
