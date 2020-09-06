@@ -1,5 +1,7 @@
 package intSet;
 
+import java.util.ArrayList;
+
 /**
  * Representation of a finite set of integers.
  * 
@@ -7,6 +9,10 @@ package intSet;
  * @invariant getCount() <= getCapacity()
  */
 public class IntSet {
+
+	private ArrayList<Integer> set;
+	private int capacity;
+	private int count;
 
 	/**
 	 * Creates a new set with 0 elements.
@@ -17,8 +23,11 @@ public class IntSet {
 	 * @post getCount() == 0
 	 * @post getCapacity() == capacity
 	 */
-	public IntSet(int capacity) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+	public IntSet(int capacity) throws Exception{
+		if (capacity < 0) throw new Exception();
+		set = new ArrayList<>();
+		this.capacity = capacity;
+		count = 0;
 	}
 
 	/**
@@ -27,7 +36,7 @@ public class IntSet {
 	 * @return getCount() == 0
 	 */
 	public boolean isEmpty() {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		return getCount() == 0;
 	}
 
 	/**
@@ -36,7 +45,10 @@ public class IntSet {
 	 * @return exists int v in getArray() such that v == value
 	 */
 	public boolean has(int value) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		for (Integer i: set) {
+			if (value == i) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -47,8 +59,15 @@ public class IntSet {
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount() + 1)
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount())
 	 */
-	public void add(int value) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+	public void add(int value) throws Exception {
+		if (!has(value)) {
+			if (count < capacity) {
+				set.add(value);
+				count++;
+			}
+			else throw new Exception();
+		}
+		else throw new Exception();
 	}
 
 	/**
@@ -58,8 +77,15 @@ public class IntSet {
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount() - 1)
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount())
 	 */
-	public void remove(int value) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+	public void remove(int value) throws Exception{
+		for (Integer i: set) {
+			if (i == value) {
+				set.remove(i);
+				count--;
+				return;
+			}
+		}
+		throw new Exception();
 	}
 
 	/**
@@ -72,8 +98,16 @@ public class IntSet {
 	 * @post forall int v: (has(v) and other.has(v)) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) and other.has(v))
 	 */
-	public IntSet intersect(IntSet other) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+	public IntSet intersect(IntSet other) throws Exception {
+		ArrayList<Integer> intersection = new ArrayList<>();
+		for (Integer i: set) {
+			if (other.has(i)) intersection.add(i);
+		}
+		IntSet newSet = new IntSet(intersection.size());
+		for (Integer i: intersection) {
+			newSet.add(i);
+		}
+		return newSet;
 	}
 
 	/**
@@ -87,8 +121,46 @@ public class IntSet {
 	 * @post forall int v: other.has(v) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) or other.has(v))
 	 */
-	public IntSet union(IntSet other) {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+	public IntSet union(IntSet other) throws Exception {
+		ArrayList<Integer> uni = new ArrayList<>();
+		for (Integer i: set) {
+			uni.add(i);
+		}
+		for (Integer i: other.getSet()) {
+			if (!has(i)) uni.add(i);
+		}
+		IntSet newSet = new IntSet(uni.size());
+		for (Integer i: uni) {
+			newSet.add(i);
+		}
+		return newSet;
+	}
+
+	public IntSet symmetricDifference(IntSet other) throws Exception {
+		ArrayList<Integer> diff = new ArrayList<>();
+		for (Integer i: set) {
+			if (!other.has(i)) diff.add(i);
+		}
+		for (Integer i: other.getSet()) {
+			if (!has(i)) diff.add(i);
+		}
+		IntSet newSet = new IntSet(diff.size());
+		for (Integer i: diff) {
+			newSet.add(i);
+		}
+		return newSet;
+	}
+
+	public IntSet difference(IntSet other) throws Exception {
+		ArrayList<Integer> diff = new ArrayList<>();
+		for (Integer i: set) {
+			if (!other.has(i)) diff.add(i);
+		}
+		IntSet newSet = new IntSet(diff.size());
+		for (Integer i: diff) {
+			newSet.add(i);
+		}
+		return newSet;
 	}
 
 	/**
@@ -98,21 +170,29 @@ public class IntSet {
 	 * @post forall int v in return: has(v)
 	 */
 	public int[] getArray() {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		int [] arr = new int[count];
+		for (int i = 0; i < count; i++) {
+			arr[i] = set.get(i);
+		}
+		return arr;
 	}
 
 	/**
 	 * Returns the number of elements in the set.
 	 */
 	public int getCount() {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		return count;
 	}
 
 	/**
 	 * Returns the maximal number of elements in the set.
 	 */
 	public int getCapacity() {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		return capacity;
+	}
+
+	public ArrayList<Integer> getSet() {
+		return set;
 	}
 
 	/**
@@ -121,7 +201,14 @@ public class IntSet {
 	 * y, z}.
 	 */
 	public String toString() {
-		throw new UnsupportedOperationException ("not yet implemented") ;
+		String output = "{";
+		boolean first = true;
+		for (Integer i: set) {
+			if (!first) output += ", ";
+			output += i;
+			first = false;
+		}
+		return output;
 	}
 
 }

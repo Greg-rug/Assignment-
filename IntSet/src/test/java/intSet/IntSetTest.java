@@ -18,4 +18,10 @@ public class IntSetTest {
 		IntSet set = new IntSet(5);
 		assertEquals(5, set.getCapacity());
 	}
+
+	@Test
+	public void testHasValue() {
+		IntSet set = new IntSet(5);
+		assertEquals(1, set.getCount());
+	}
 }
