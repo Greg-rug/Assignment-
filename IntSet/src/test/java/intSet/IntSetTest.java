@@ -205,10 +205,13 @@ public class IntSetTest {
 
 	@Test
 	public void testToString() {
+		//test for empty set
 		assertEquals("{}", set1.toString());
 		set1.add(1);
+		//test for set with 1 element
 		assertEquals("{1}", set1.toString());
 		set1.add(2);
+		//test for set with multiple elements
 		assertEquals("{1, 2}", set1.toString());
 	}
 

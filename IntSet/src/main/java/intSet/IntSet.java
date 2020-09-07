@@ -10,8 +10,8 @@ import java.util.ArrayList;
  */
 public class IntSet {
 
-	private ArrayList<Integer> set;
-	private int capacity;
+	private final ArrayList<Integer> set;
+	private final int capacity;
 	private int count;
 
 	/**
@@ -93,15 +93,11 @@ public class IntSet {
 	 * @post forall int v: (has(v) and other.has(v)) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) and other.has(v))
 	 */
-	public IntSet intersect(IntSet other) throws IllegalArgumentException {
+	public IntSet intersect(IntSet other) {
 		if (other != null) {
-			ArrayList<Integer> intersection = new ArrayList<>();
+			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i : set) {
-				if (other.has(i)) intersection.add(i);
-			}
-			IntSet newSet = new IntSet(intersection.size());
-			for (Integer i : intersection) {
-				newSet.add(i);
+				if (other.has(i)) newSet.add(i);
 			}
 			return newSet;
 		}
@@ -119,51 +115,14 @@ public class IntSet {
 	 * @post forall int v: other.has(v) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) or other.has(v))
 	 */
-	public IntSet union(IntSet other) throws IllegalArgumentException {
+	public IntSet union(IntSet other) {
 		if (other != null) {
-			ArrayList<Integer> uni = new ArrayList<>();
+			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i: set) {
-				uni.add(i);
+				newSet.add(i);
 			}
-			return getIntSet(other, uni);
-		}
-		return null;
-	}
-
-	private IntSet getIntSet(IntSet other, ArrayList<Integer> uni) throws IllegalArgumentException {
-		if (other != null) {
 			for (Integer i : other.getSet()) {
-				if (!has(i)) uni.add(i);
-			}
-			IntSet newSet = new IntSet(uni.size());
-			for (Integer i : uni) {
-				newSet.add(i);
-			}
-			return newSet;
-		}
-		return null;
-	}
-
-	public IntSet symmetricDifference(IntSet other) throws IllegalArgumentException {
-		if (other != null) {
-			ArrayList<Integer> diff = new ArrayList<>();
-			for (Integer i: set) {
-				if (!other.has(i)) diff.add(i);
-			}
-			return getIntSet(other, diff);
-		}
-		return null;
-	}
-
-	public IntSet difference(IntSet other) throws IllegalArgumentException {
-		if (other != null) {
-			ArrayList<Integer> diff = new ArrayList<>();
-			for (Integer i: set) {
-				if (!other.has(i)) diff.add(i);
-			}
-			IntSet newSet = new IntSet(diff.size());
-			for (Integer i: diff) {
-				newSet.add(i);
+				if (!has(i)) newSet.add(i);
 			}
 			return newSet;
 		}
@@ -171,7 +130,42 @@ public class IntSet {
 	}
 
 	/**
-	 * Returns a representation of this set as an array
+	 *
+	 * @param other the set to do symmetric difference with
+	 * @return the symmetric difference
+	 */
+	public IntSet symmetricDifference(IntSet other) {
+		if (other != null) {
+			IntSet newSet = new IntSet(capacity + other.getCapacity());
+			for (Integer i: set) {
+				if (!other.has(i)) newSet.add(i);
+			}
+			for (Integer i : other.getSet()) {
+				if (!has(i)) newSet.add(i);
+			}
+			return newSet;
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 * @param other the set to do difference with
+	 * @return the difference (this \ other)
+	 */
+	public IntSet difference(IntSet other) {
+		if (other != null) {
+			IntSet newSet = new IntSet(capacity + other.getCapacity());
+			for (Integer i: set) {
+				if (!other.has(i)) newSet.add(i);
+			}
+			return newSet;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns a representation of this set as an array.
 	 * 
 	 * @post return.length == getCount()
 	 * @post forall int v in return: has(v)
@@ -198,6 +192,9 @@ public class IntSet {
 		return capacity;
 	}
 
+	/**
+	 * Returns ArrayList representation of this set.
+	 */
 	public ArrayList<Integer> getSet() {
 		return set;
 	}
