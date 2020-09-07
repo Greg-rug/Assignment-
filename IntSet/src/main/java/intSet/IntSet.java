@@ -58,12 +58,15 @@ public class IntSet {
 	 * @post has(value)
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount() + 1)
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount())
+	 * @retrun true if value is already in the set or value was added, otherwise returns false
 	 */
-	public void add(int value) {
-		if (!has(value) && count < capacity) {
+	public boolean add(int value) {
+		if (!has(value)) {
+			if (count >= capacity) return false;
 			set.add(value);
 			count++;
 		}
+		return true;
 	}
 
 	/**
