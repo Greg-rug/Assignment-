@@ -58,15 +58,13 @@ public class IntSet {
 	 * @post has(value)
 	 * @post !this@pre.has(value) implies (getCount() == this@pre.getCount() + 1)
 	 * @post this@pre.has(value) implies (getCount() == this@pre.getCount())
-	 * @retrun true if value is already in the set or value was added, otherwise returns false
 	 */
-	public boolean add(int value) {
+	public void add(int value) throws SetCapacityFullException{
 		if (!has(value)) {
-			if (count >= capacity) return false;
+			if (count >= capacity)  throw new SetCapacityFullException("adding to full set");
 			set.add(value);
 			count++;
 		}
-		return true;
 	}
 
 	/**
@@ -96,7 +94,7 @@ public class IntSet {
 	 * @post forall int v: (has(v) and other.has(v)) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) and other.has(v))
 	 */
-	public IntSet intersect(IntSet other) {
+	public IntSet intersect(IntSet other) throws NullPointerException, SetCapacityFullException {
 		if (other != null) {
 			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i : set) {
@@ -104,7 +102,7 @@ public class IntSet {
 			}
 			return newSet;
 		}
-		return null;
+		throw new NullPointerException("null set part of set operation");
 	}
 
 	/**
@@ -118,7 +116,7 @@ public class IntSet {
 	 * @post forall int v: other.has(v) implies return.has(v)
 	 * @post forall int v: return.has(v) implies (has(v) or other.has(v))
 	 */
-	public IntSet union(IntSet other) {
+	public IntSet union(IntSet other) throws NullPointerException, SetCapacityFullException {
 		if (other != null) {
 			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i: set) {
@@ -129,7 +127,7 @@ public class IntSet {
 			}
 			return newSet;
 		}
-		return null;
+		throw new NullPointerException("null set part of set operation");
 	}
 
 	/**
@@ -137,7 +135,7 @@ public class IntSet {
 	 * @param other the set to do symmetric difference with
 	 * @return the symmetric difference
 	 */
-	public IntSet symmetricDifference(IntSet other) {
+	public IntSet symmetricDifference(IntSet other) throws NullPointerException, SetCapacityFullException {
 		if (other != null) {
 			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i: set) {
@@ -148,7 +146,7 @@ public class IntSet {
 			}
 			return newSet;
 		}
-		return null;
+		throw new NullPointerException("null set part of set operation");
 	}
 
 	/**
@@ -156,7 +154,7 @@ public class IntSet {
 	 * @param other the set to do difference with
 	 * @return the difference (this \ other)
 	 */
-	public IntSet difference(IntSet other) {
+	public IntSet difference(IntSet other) throws NullPointerException, SetCapacityFullException {
 		if (other != null) {
 			IntSet newSet = new IntSet(capacity + other.getCapacity());
 			for (Integer i: set) {
@@ -164,7 +162,7 @@ public class IntSet {
 			}
 			return newSet;
 		}
-		return null;
+		throw new NullPointerException("null set part of set operation");
 	}
 
 	/**
