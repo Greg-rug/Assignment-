@@ -1,7 +1,9 @@
 package chatrooms.model.chatroom;
 
 import chatrooms.model.MessageFeed;
+import chatrooms.view.TextFeedPanel;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
@@ -13,27 +15,20 @@ public class ChatRoom {
     private final MessageFeed messageFeed;
     private int portNumber;
     private String name;
+    private static final int portNumberMS = 6543;
 
     public ChatRoom(String name) {
         this.name = name;
         messageFeed = new MessageFeed();
     }
 
-    //replace by constant?
-    private int inputMainServerPort() {
-        //String portString = JOptionPane.showInputDialog("Provide server port:");
-        //return Integer.parseInt(portString);
-        return 6543;
-    }
-
     public boolean reportPortNumber() {
         Socket socketMS = new Socket();
-        int portMS = inputMainServerPort();
         try {
-            socketMS.connect(new InetSocketAddress("localhost", portMS), 1000);
+            socketMS.connect(new InetSocketAddress("localhost", portNumberMS), 1000);
             if (!socketMS.isConnected()) throw new IOException();
         } catch (IOException e) {
-            System.out.println("Unable to make connection to main server.");
+            messageFeed.setMessage("Unable to make connection to main server.");
             return false;
         }
         try (PrintWriter out = new PrintWriter(socketMS.getOutputStream(), true)) {
@@ -43,36 +38,21 @@ public class ChatRoom {
             socketMS.close();
 
         } catch (IOException e) {
-            System.out.println("Unable to make connection to main server.");
+            messageFeed.setMessage("Unable to make connection to main server.");
             return false;
         }
         return true;
     }
 
-    /*
-    private void setupGUI() {
-        SwingUtilities.invokeLater(() -> {
-            ClientPanel panel = new ClientPanel(messageFeed, this);
-            JFrame frame = new JFrame();
-
-            frame.setContentPane(panel);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        });
-    }
-    */
-
     public void start() {
+        setupGUI();
         try (ServerSocket ss = new ServerSocket(0)) {
             portNumber = ss.getLocalPort();
             if (!reportPortNumber()) {
-                System.out.println("Unable to make connection");
+                messageFeed.setMessage("Unable to make connection");
                 return;
             }
-
-            //setupGUI();
+            messageFeed.setMessage("Welcome!");
 
             while (true) {
                 Socket socket = ss.accept();
@@ -86,5 +66,18 @@ public class ChatRoom {
         }
 
         System.exit(0);
+    }
+
+    private void setupGUI() {
+        SwingUtilities.invokeLater(() -> {
+            TextFeedPanel panel = new TextFeedPanel(messageFeed);
+            JFrame frame = new JFrame();
+
+            frame.setContentPane(panel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        });
     }
 }

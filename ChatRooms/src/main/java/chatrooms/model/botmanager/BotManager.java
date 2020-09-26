@@ -1,6 +1,8 @@
 package chatrooms.model.botmanager;
 
-import java.util.Random;
+import chatrooms.view.BotManagerPanel;
+
+import javax.swing.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -14,14 +16,28 @@ public class BotManager {
         Executors.newFixedThreadPool(numberOfBots);
     }
 
-    public void start() {
-        spawnBots();
+    public void killAllBots() {
+        executorService.shutdownNow();
     }
 
-    private void spawnBots() {
+    public void spawnBots() {
+        setupGUI();
         //Random r = new Random();
-        for (int i = 0; i < numberOfBots; i++) {
-            executorService.submit(new Thread(new NormalBot("Name" + (i+1), true)));
+        for (int i = 1; i <= numberOfBots; i++) {
+            executorService.submit(new Thread(new NormalBot("Name" + (i), true)));
         }
+    }
+
+    private void setupGUI() {
+        SwingUtilities.invokeLater(() -> {
+            BotManagerPanel panel = new BotManagerPanel(this);
+            JFrame frame = new JFrame();
+
+            frame.setContentPane(panel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        });
     }
 }

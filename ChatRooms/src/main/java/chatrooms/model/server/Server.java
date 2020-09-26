@@ -1,5 +1,9 @@
 package chatrooms.model.server;
 
+import chatrooms.model.MessageFeed;
+import chatrooms.view.TextFeedPanel;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -13,15 +17,18 @@ public class Server {
 
     private final ArrayList<Integer> portNumbers;
     private static final int portNumber = 6543;
+    private final MessageFeed messageFeed;
 
     public Server() {
         portNumbers = new ArrayList<>();
+        messageFeed = new MessageFeed();
     }
 
     public void start() {
+        setupGUI();
+        messageFeed.setMessage("Starting server at port " + portNumber);
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
-            System.out.println("Starting server on port: " + portNumber);
-
+            messageFeed.setMessage("Serve successfully started at port " + portNumber);
             //is server supposed to shutdown?
             while (true) {
                 Socket socket = serverSocket.accept();
@@ -34,10 +41,10 @@ public class Server {
                         int roomNumber = selectRandomPortNumber();
                         if (roomNumber != -1) {
                             out.println(roomNumber);
-                            if (words[1].equals("0")) {
-                                System.out.println("BOT " + words[2] + " is joining the room at " + roomNumber);
+                            if (words[2].equals("0")) {
+                                messageFeed.setMessage("BOT " + words[1] + " is joining the room at " + roomNumber);
                             } else {
-                                System.out.println("BOT " + words[2] + " is changing room to the room at " + roomNumber);
+                                messageFeed.setMessage("BOT " + words[1] + " is changing the room to " + roomNumber);
                             }
                         }
                     }
@@ -45,16 +52,29 @@ public class Server {
                         //implement end signal from chat room??
                         try {
                             portNumbers.add(Integer.parseInt(words[2]));
-                            System.out.println(words[1] + " is listening at port " + words[2]);
+                            messageFeed.setMessage(words[1] + " is listening at port " + words[2]);
                         } catch (NumberFormatException nfe) {
-                            System.out.println("CHATROOM " + words[1] + " sent incorrectly formatted string, unable to connect.");
+                            messageFeed.setMessage("CHATROOM " + words[1] + " sent incorrectly formatted string, unable to connect.");
                         }
                     }
                 }
             }
         } catch (IOException e) {
-            System.out.println("Connection error, server shuts down.");
+            messageFeed.setMessage("Connection error, server shuts down.");
         }
+    }
+
+    private void setupGUI() {
+        SwingUtilities.invokeLater(() -> {
+            TextFeedPanel panel = new TextFeedPanel(messageFeed);
+            JFrame frame = new JFrame();
+
+            frame.setContentPane(panel);
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        });
     }
 
     private int selectRandomPortNumber() {

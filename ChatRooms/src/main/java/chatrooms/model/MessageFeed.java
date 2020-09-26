@@ -21,7 +21,7 @@ public class MessageFeed {
      * Creates a new PropertyChangeEvent every time the message is updated. It then calls firePropertyChange with this event
      * @param message the new message
      */
-    public void setMessage(String message) {
+    public synchronized void setMessage(String message) {
         PropertyChangeEvent messageEvent = new PropertyChangeEvent(this, "message", this.message, message);
         this.message = message;
         changeSupport.firePropertyChange(messageEvent);
