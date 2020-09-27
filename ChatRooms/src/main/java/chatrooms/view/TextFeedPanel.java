@@ -30,7 +30,6 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
 
         add(putInTitledScrollPane(outputTextArea, title));
 
-
         outputTextArea.append(messageFeed.getMessage() + "\n");
     }
 

@@ -1,7 +1,7 @@
 package chatrooms.model.botmanager;
 
 import chatrooms.model.MessageFeed;
-import chatrooms.model.ThreadedConnectionHandler;
+import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
 
 import java.io.BufferedReader;
@@ -70,7 +70,7 @@ public abstract class Bot implements Runnable {
                             BotManager.MIN_INTERVAL + 1) + BotManager.MIN_INTERVAL));
                 }
             } catch (InterruptedException e) {
-                out.println(ThreadedConnectionHandler.DISCONNECT_SIGNAL);
+                out.println(ConnectionHandler.DISCONNECT_SIGNAL);
             }
             in.close();
             out.close();

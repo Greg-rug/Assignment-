@@ -2,25 +2,40 @@ package chatrooms.model.server;
 
 import chatrooms.model.ArrayListFeed;
 import chatrooms.model.MessageFeed;
-import chatrooms.model.ThreadedConnectionHandler;
+import chatrooms.model.ConnectionHandler;
 import chatrooms.view.TextFeedPanel;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
 
     public static final int PORT_NUMBER = 58965;
-    private final ArrayListFeed portNumbers;
     private static final int MAX_CONNECTIONS = 100;
+
+    private final ArrayListFeed portNumbers;
     private final MessageFeed messageFeed;
     private final ExecutorService executorService;
+
+    /*
+     * constants,
+     * executor service for each program
+     * after clicking exit in chatroom remove port number from main server
+     * minimalistic gui
+     * bot inheritance
+     * server shutting down
+     * bot names enum
+     * packages
+     * to which package when it's used by both server and chatrooom (is it ok to join their packages?)
+     * gui elements in model
+     * console error output for bot manager
+     * is bot manager supposed to shut down after kill all?
+     *
+    */
 
     public Server() {
         portNumbers = new ArrayListFeed();
@@ -32,11 +47,9 @@ public class Server {
         setupGUI();
         try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {
             messageFeed.setMessage("Server successfully started at port " + PORT_NUMBER);
-
-            //is server ever suppose to shutdown?
             while (true) {
                 Socket socket = serverSocket.accept();
-                executorService.submit(new ThreadedConnectionHandler(socket, messageFeed, portNumbers));
+                executorService.submit(new ConnectionHandler(socket, messageFeed, portNumbers));
             }
         } catch (IOException e) {
             messageFeed.setMessage("Connection error, server shuts down.");

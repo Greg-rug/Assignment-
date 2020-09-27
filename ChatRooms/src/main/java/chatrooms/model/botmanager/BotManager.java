@@ -1,5 +1,7 @@
 package chatrooms.model.botmanager;
 
+import chatrooms.model.botmanager.bots.NormalBot;
+import chatrooms.model.botmanager.bots.RepeatBot;
 import chatrooms.view.BotManagerPanel;
 
 import javax.swing.*;

@@ -1,7 +1,7 @@
 package chatrooms.model.chatroom;
 
 import chatrooms.model.MessageFeed;
-import chatrooms.model.ThreadedConnectionHandler;
+import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
 import chatrooms.view.TextFeedPanel;
 
@@ -11,16 +11,22 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ChatRoom {
 
+    private static final int MAX_CONNECTIONS = 20;
+
     private final MessageFeed messageFeed;
     private int portNumber;
-    private String name;
+    private final String name;
+    private final ExecutorService executorService;
 
     public ChatRoom(String name) {
         this.name = name;
         messageFeed = new MessageFeed();
+        executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
     }
 
     public boolean reportPortNumber() {
@@ -47,8 +53,7 @@ public class ChatRoom {
             messageFeed.setMessage("Chatroom " + name + " starts");
             while (true) {
                 Socket socket = ss.accept();
-                Thread t = new Thread(new ThreadedConnectionHandler(socket, messageFeed));
-                t.start();
+                executorService.submit(new ConnectionHandler(socket, messageFeed));
             }
         } catch (IOException e) {
             messageFeed.setMessage("Network error");

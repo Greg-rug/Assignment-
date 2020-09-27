@@ -4,7 +4,6 @@ import chatrooms.controller.botmanager.KillAllButtonListener;
 import chatrooms.model.botmanager.BotManager;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class BotManagerPanel extends JPanel {
 
@@ -15,22 +14,12 @@ public class BotManagerPanel extends JPanel {
         this.botManager = botManager;
         setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(putInTitledScrollPane(constructBox()));
+        add(setButton());
     }
 
-    private JPanel putInTitledScrollPane(JComponent component) {
-        JPanel wrapperPanel = new JPanel(new BorderLayout());
-        wrapperPanel.setBorder(BorderFactory.createTitledBorder(""));
-        wrapperPanel.add(new JScrollPane(component));
-        return wrapperPanel;
-    }
-
-    private Box constructBox() {
-        JButton sendButton = new JButton("Kill all");
-        sendButton.addActionListener(new KillAllButtonListener(botManager));
-
-        Box bh = Box.createHorizontalBox();
-        bh.add(sendButton);
-        return bh;
+    private JButton setButton() {
+        JButton button = new JButton("Kill all");
+        button.addActionListener(new KillAllButtonListener(botManager));
+        return button;
     }
 }

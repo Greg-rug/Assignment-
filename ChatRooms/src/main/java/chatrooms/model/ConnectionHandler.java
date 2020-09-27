@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ThreadedConnectionHandler implements Runnable, PropertyChangeListener {
+public class ConnectionHandler implements Runnable, PropertyChangeListener {
 
     public static final String DISCONNECT_SIGNAL = "REQEFAOINSFOIASNFOAIPASDNASDNOINCPAE";
 
@@ -19,7 +19,7 @@ public class ThreadedConnectionHandler implements Runnable, PropertyChangeListen
     private ArrayListFeed portNumbers;
     private boolean isChatRoom;
 
-    public ThreadedConnectionHandler(Socket socket, MessageFeed messageFeed) throws IOException {
+    public ConnectionHandler(Socket socket, MessageFeed messageFeed) throws IOException {
         out = new PrintWriter(socket.getOutputStream(), true);
         messageFeed.addListener(this);
         chatRoomPortNumber = -2;
@@ -28,8 +28,8 @@ public class ThreadedConnectionHandler implements Runnable, PropertyChangeListen
         isChatRoom = true;
     }
 
-    public ThreadedConnectionHandler(Socket socket, MessageFeed messageFeed,
-                                     ArrayListFeed portNumbers) throws IOException {
+    public ConnectionHandler(Socket socket, MessageFeed messageFeed,
+                             ArrayListFeed portNumbers) throws IOException {
         this(socket, messageFeed);
         portNumbers.addListener(this);
         chatRoomPortNumber = -1;

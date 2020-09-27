@@ -1,4 +1,6 @@
-package chatrooms.model.botmanager;
+package chatrooms.model.botmanager.bots;
+
+import chatrooms.model.botmanager.Bot;
 
 public class NormalBot extends Bot {
 
