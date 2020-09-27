@@ -21,10 +21,11 @@ public class Server {
     private final MessageFeed messageFeed;
     private final ExecutorService executorService;
 
-    /*
+    /* DEMO questions
      * constants,
      * executor service for each program
      * after clicking exit in chatroom remove port number from main server
+     * switch statement in bot manager
      * minimalistic gui
      * bot inheritance
      * server shutting down
@@ -34,7 +35,6 @@ public class Server {
      * gui elements in model
      * console error output for bot manager
      * is bot manager supposed to shut down after kill all?
-     *
     */
 
     public Server() {
