@@ -10,10 +10,10 @@ public class MessageFeed {
     private final PropertyChangeSupport changeSupport;
 
     public MessageFeed() {
-        this.changeSupport = new PropertyChangeSupport(this);
+        changeSupport = new PropertyChangeSupport(this);
     }
 
-    public String getMessage() {
+    public synchronized String getMessage() {
         return message;
     }
 

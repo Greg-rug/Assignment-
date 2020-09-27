@@ -17,7 +17,7 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
     private final int GAP = 3;
 
 
-    public TextFeedPanel(MessageFeed messageFeed) {
+    public TextFeedPanel(MessageFeed messageFeed, String title) {
         this.messageFeed = messageFeed;
         messageFeed.addListener(this);
 
@@ -28,7 +28,7 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
         setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        add(putInTitledScrollPane(outputTextArea, "Output Text"));
+        add(putInTitledScrollPane(outputTextArea, title));
 
 
         outputTextArea.append(messageFeed.getMessage() + "\n");

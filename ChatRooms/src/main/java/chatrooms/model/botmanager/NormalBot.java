@@ -1,7 +1,5 @@
 package chatrooms.model.botmanager;
 
-import java.beans.PropertyChangeEvent;
-
 public class NormalBot extends Bot {
 
     public NormalBot(String name, boolean isLocalBot) {
@@ -10,7 +8,7 @@ public class NormalBot extends Bot {
 
     @Override
     public String nextString() {
-        return ("Hello, my name is " + name + " and I am a normal bot.");
+        return ("I am totally normal - " + name);
     }
 
 }

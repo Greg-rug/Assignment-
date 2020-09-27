@@ -3,29 +3,52 @@ package chatrooms.model.botmanager;
 import chatrooms.view.BotManagerPanel;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BotManager {
 
-    private int numberOfBots;
-    private ExecutorService executorService;
+    //in seconds
+    public static final int MAX_INTERVAL = 7;
+    public static final int MIN_INTERVAL = 2;
+
+    private static final int NUMBER_OF_BOT_TYPES = 2;
+    private static final Random r = new Random();
+
+    private final int numberOfBots;
+    private final ArrayList<Bot> bots;
+    private final ExecutorService executorService;
 
     public BotManager(int numberOfBots) {
         this.numberOfBots = numberOfBots;
         executorService = Executors.newFixedThreadPool(numberOfBots);
+        bots = new ArrayList<>();
     }
 
     public void killAllBots() {
+        for (Bot b: bots) b.setKill(true);
         executorService.shutdownNow();
     }
 
     public void spawnBots() {
         setupGUI();
-        //Random r = new Random();
         for (int i = 1; i <= numberOfBots; i++) {
-            executorService.submit(new Thread(new NormalBot("Name" + (i), true)));
+            Bot newBot = generateBot();
+            bots.add(newBot);
+            executorService.submit(new Thread(newBot));
         }
+    }
+
+    private Bot generateBot() {
+        switch (r.nextInt(NUMBER_OF_BOT_TYPES)) {
+            //NormalBot
+            case 0: return new NormalBot(BotNames.getRandomName(), r.nextBoolean());
+            //RepeatBot
+            case 1: return new RepeatBot(BotNames.getRandomName(), r.nextBoolean());
+        }
+        return null;
     }
 
     private void setupGUI() {

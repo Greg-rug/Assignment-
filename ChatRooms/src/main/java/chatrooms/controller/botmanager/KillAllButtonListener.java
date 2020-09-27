@@ -16,5 +16,11 @@ public class KillAllButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         botManager.killAllBots();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+            System.out.println("Interrupted");
+        }
+        System.exit(0);
     }
 }
