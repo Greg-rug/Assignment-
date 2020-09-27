@@ -49,20 +49,20 @@ public class ChatRoom {
         try (ServerSocket ss = new ServerSocket(0)) {
             portNumber = ss.getLocalPort();
             if (!reportPortNumber()) {
-                messageFeed.setMessage("Unable to make connection");
+                messageFeed.setMessage("Unable to make connection to the main server");
                 return;
             }
-            messageFeed.setMessage("Welcome!");
+            messageFeed.setMessage("Chatroom " + name + " starts");
 
             while (true) {
                 Socket socket = ss.accept();
-                Thread t = new Thread(new ThreadedBotHandler(socket, messageFeed));
+                Thread t = new Thread(new ThreadedConnectionHandler(socket, messageFeed));
                 t.start();
                 //t = new Thread(new ThreadedBotSender(socket, messageFeed));
                 //t.start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            messageFeed.setMessage("Network error");
         }
 
         System.exit(0);

@@ -29,7 +29,7 @@ public class Server {
         messageFeed.setMessage("Starting server at port " + portNumber);
         try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             messageFeed.setMessage("Serve successfully started at port " + portNumber);
-            //is server supposed to shutdown?
+            //is server ever suppose to shutdown?
             while (true) {
                 Socket socket = serverSocket.accept();
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

@@ -10,11 +10,7 @@ public class NormalBot extends Bot {
 
     @Override
     public String nextString() {
-        return "Normal message";
+        return ("Hello, my name is " + name + " and I am a normal bot.");
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-
-    }
 }

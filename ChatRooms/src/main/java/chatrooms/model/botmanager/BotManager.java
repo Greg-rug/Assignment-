@@ -13,7 +13,7 @@ public class BotManager {
 
     public BotManager(int numberOfBots) {
         this.numberOfBots = numberOfBots;
-        Executors.newFixedThreadPool(numberOfBots);
+        executorService = Executors.newFixedThreadPool(numberOfBots);
     }
 
     public void killAllBots() {

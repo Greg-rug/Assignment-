@@ -10,12 +10,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ThreadedBotHandler implements Runnable, PropertyChangeListener {
+public class ThreadedConnectionHandler implements Runnable, PropertyChangeListener {
 
     private final Socket socket;
     private final MessageFeed messageFeed;
 
-    public ThreadedBotHandler(Socket socket, MessageFeed messageFeed) {
+    public ThreadedConnectionHandler(Socket socket, MessageFeed messageFeed) {
         messageFeed.addListener(this);
         this.socket = socket;
         this.messageFeed = messageFeed;
@@ -25,9 +25,20 @@ public class ThreadedBotHandler implements Runnable, PropertyChangeListener {
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-            String line;
+            String botName;
+            String line = in.readLine();
+            if (line == null) {
+                messageFeed.setMessage("BOT failed to identify themself, ending connection");
+                in.close();
+                socket.close();
+                return;
+            }
+            else {
+                botName = line;
+                messageFeed.setMessage("BOT " + botName + " joins the chatroom");
+            }
             while ((line = in.readLine()) != null) {
-                messageFeed.setMessage(line);
+                messageFeed.setMessage("BOT " + botName + ": " +line);
             }
 
         } catch (IOException e) {

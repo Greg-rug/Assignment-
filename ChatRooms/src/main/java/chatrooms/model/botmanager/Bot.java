@@ -10,22 +10,21 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Random;
 
 public abstract class Bot implements PropertyChangeListener, Runnable {
 
-    private final MessageFeed messageFeed;
-    private final String name;
+    protected final MessageFeed messageFeed;
+    protected final String name;
     private boolean isLocalBot;
     private boolean changeRoom;
     private static final int portNumberMS = 6543;
-    private int portChatRoom;
 
     public Bot (String name, boolean isLocalBot) {
         messageFeed = new MessageFeed();
         this.name = name;
         this.isLocalBot = isLocalBot;
         changeRoom = false;
-        portChatRoom = -1;
     }
 
     public abstract String nextString();
@@ -59,27 +58,42 @@ public abstract class Bot implements PropertyChangeListener, Runnable {
         return port;
     }
 
-    private void beInChatRoom() {
-        while (!changeRoom) {
-            /*
-            try {
+    private void beInChatRoom(Socket socket) {
+        Random random = new Random();
+        try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-            } catch (IOException e) {
-                System.out.println("Connection problem");
+            out.println(name);
+            out.println("Hello, my name is " + name);
+
+            while (!changeRoom) {
+                Thread.sleep(1000 * (random.nextInt(6) + 2));
+                out.println(nextString());
             }
+            in.close();
+            out.close();
+            socket.close();
 
-             */
+        } catch (IOException e) {
+            System.out.println("Unable to make connection to main server.");
+        } catch (InterruptedException e) {
+            System.out.println("Interrupted");
         }
     }
 
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
+    }
 
     public void run() {
         int port = askForPortNumber();
         Socket socketChatRoom = new Socket();
         try {
-            socketChatRoom.connect(new InetSocketAddress("localhost", portChatRoom), 1000);
+            socketChatRoom.connect(new InetSocketAddress("localhost", port), 1000);
             if (!socketChatRoom.isConnected()) throw new IOException();
-            beInChatRoom();
+            beInChatRoom(socketChatRoom);
         } catch (IOException e) {
             System.out.println("Unable to connect to chatRoom.");
         }
