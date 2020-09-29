@@ -30,7 +30,9 @@ public abstract class Bot implements Runnable {
         kill = false;
     }
 
-    public abstract String nextString();
+    protected abstract String nextString();
+
+    protected abstract String greeting();
 
     private int askForPortNumber() {
         Socket socketMS = new Socket();
@@ -58,7 +60,7 @@ public abstract class Bot implements Runnable {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             out.println(name);
-            send("Hello, my name is " + name);
+            send(greeting());
             try {
                 while (!kill) {
                     while(in.ready()) {
@@ -81,7 +83,7 @@ public abstract class Bot implements Runnable {
     }
 
     private Socket establishConnection() {
-        int port = askForPortNumber();;
+        int port = askForPortNumber();
         if (port == -1) return null;
         Socket socketChatRoom = new Socket();
         try {

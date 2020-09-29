@@ -3,9 +3,7 @@ package chatrooms.model.chatroom;
 import chatrooms.model.Feed;
 import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
-import chatrooms.view.TextFeedPanel;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;

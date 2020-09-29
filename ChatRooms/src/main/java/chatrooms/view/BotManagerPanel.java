@@ -4,22 +4,18 @@ import chatrooms.controller.botmanager.KillAllButtonListener;
 import chatrooms.model.botmanager.BotManager;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class BotManagerPanel extends JPanel {
 
-    private final BotManager botManager;
-    private final int GAP = 3;
+    private static final int WIDTH = 150;
+    private static final int HEIGHT = (int) (WIDTH/1.618);
 
     public BotManagerPanel(BotManager botManager) {
-        this.botManager = botManager;
-        setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        add(setButton());
-    }
-
-    private JButton setButton() {
+        setLayout(new GridLayout(1,1));
+        setPreferredSize(new Dimension(WIDTH,HEIGHT));
         JButton button = new JButton("Kill all");
         button.addActionListener(new KillAllButtonListener(botManager));
-        return button;
+        add(button);
     }
 }

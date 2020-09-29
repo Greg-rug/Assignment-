@@ -31,7 +31,6 @@ public class BotManager {
     }
 
     public void spawnBots() {
-        setupGUI();
         for (int i = 1; i <= numberOfBots; i++) {
             Bot newBot = generateBot();
             bots.add(newBot);
@@ -41,18 +40,5 @@ public class BotManager {
 
     private Bot generateBot() {
         return botFactory.getRandomBot();
-    }
-
-    private void setupGUI() {
-        SwingUtilities.invokeLater(() -> {
-            BotManagerPanel panel = new BotManagerPanel(this);
-            JFrame frame = new JFrame();
-
-            frame.setContentPane(panel);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        });
     }
 }

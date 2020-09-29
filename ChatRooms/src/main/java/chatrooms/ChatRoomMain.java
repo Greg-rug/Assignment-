@@ -1,7 +1,7 @@
 package chatrooms;
 
 import chatrooms.model.chatroom.*;
-import chatrooms.view.TextFeedFrame;
+import chatrooms.view.SimpleFrame;
 
 public class ChatRoomMain {
 
@@ -9,7 +9,7 @@ public class ChatRoomMain {
 
     public static void main(String[] args) {
         ChatRoom chatRoom = new ChatRoom(TITLE);
-        new TextFeedFrame(chatRoom.getMessageFeed(), TITLE);
+        new SimpleFrame(chatRoom.getMessageFeed(), TITLE);
         chatRoom.start();
     }
 }

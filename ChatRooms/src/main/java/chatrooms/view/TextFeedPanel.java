@@ -9,25 +9,21 @@ import java.beans.PropertyChangeListener;
 
 public class TextFeedPanel extends JPanel implements PropertyChangeListener {
 
+    private static final int ROWS = 30;
+    private static final int COLUMNS = 30;
+    private static final int GAP = 3;
+
     private final Feed<String> messageFeed;
     private final JTextArea outputTextArea;
-
-    private final int ROWS = 23;
-    private final int COLUMNS = 23;
-    private final int GAP = 3;
-
 
     public TextFeedPanel(Feed<String> messageFeed, String title) {
         this.messageFeed = messageFeed;
         messageFeed.addListener(this);
-
         outputTextArea = new JTextArea(ROWS, COLUMNS);
         outputTextArea.setFocusable(false);
         outputTextArea.setEditable(false);
-
         setBorder(BorderFactory.createEmptyBorder(GAP, GAP, GAP, GAP));
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
         add(putInTitledScrollPane(outputTextArea, title));
     }
 

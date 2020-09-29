@@ -21,17 +21,8 @@ public class RepeatBot extends Bot {
         return line;
     }
 
-    /*
     @Override
-    public void run() {
-        try {
-            out.println("I am - " + name + " and I shall repeat whatever you type . Enter BYE to exit");
-            String line;
-            while ((line = in.readLine()) != null && !line.trim().equalsIgnoreCase("BYE")) {                  
-			send(line);
-                }
-        } 
+    protected String greeting() {
+        return "I am " + name + " and I shall repeat whatever you type";
     }
-
-     */
 }
