@@ -10,7 +10,7 @@ import java.net.Socket;
 
 public class ConnectionHandler implements Runnable, PropertyChangeListener {
 
-    public static final String DISCONNECT_SIGNAL = "REQEFAOINSFOIASNFOAIPASDNASDNOINCPAE";
+    public static final String DISCONNECT_SIGNAL = "DISCONNECT_ME";
 
     private final Socket socket;
     private final MessageFeed messageFeed;

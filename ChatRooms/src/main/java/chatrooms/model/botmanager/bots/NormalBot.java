@@ -7,11 +7,17 @@ public class NormalBot extends Bot {
     public NormalBot(String name, boolean isLocalBot) {
         super(name, isLocalBot);
     }
-       
-    final static int nrWords = 5;	
-    final static int lenghtSentence = 10;	
-    final static String SPACE = " ";	
-    final static String PERIOD = ".";     		
+
+    @Override
+    public String nextString() {
+        return ("I am totally normal - " + name);
+    }
+
+    /*
+    private final static int nrWords = 5;
+    private final static int lenghtSentence = 10;
+    private final static String SPACE = " ";
+    private final static String PERIOD = ".";
 
     static Random r = new Random();
     public String RandomSentence(){
@@ -50,4 +56,5 @@ public class NormalBot extends Bot {
         } 
      }
 
+     */
 }

@@ -1,6 +1,7 @@
 package chatrooms.model.botmanager;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public enum BotNames {
 
@@ -67,10 +68,9 @@ public enum BotNames {
     Will,
     Wyatt;
 
-    private static final BotNames[] VALUES = values();
-    private static final Random random = new Random();
-
-    public static String getRandomName()  {
-        return VALUES[random.nextInt(VALUES.length)].toString();
+    public static ArrayList<String> getAllBotNames() {
+        ArrayList<String> names = new ArrayList<>();
+        IntStream.range(0, values().length).forEach(i -> names.add(values()[i].toString()));
+        return names;
     }
 }
