@@ -46,7 +46,6 @@ public class ChatRoom {
     }
 
     public void start() {
-        setupGUI();
         try (ServerSocket ss = new ServerSocket(0)) {
             portNumber = ss.getLocalPort();
             if (!reportPortNumber()) return;
@@ -60,16 +59,7 @@ public class ChatRoom {
         }
     }
 
-    private void setupGUI() {
-        SwingUtilities.invokeLater(() -> {
-            TextFeedPanel panel = new TextFeedPanel(messageFeed, name);
-            JFrame frame = new JFrame();
-
-            frame.setContentPane(panel);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        });
+    public Feed<String> getMessageFeed() {
+        return messageFeed;
     }
 }

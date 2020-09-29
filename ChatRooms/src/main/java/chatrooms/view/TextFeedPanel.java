@@ -29,8 +29,6 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         add(putInTitledScrollPane(outputTextArea, title));
-
-        outputTextArea.append(messageFeed.getLast() + "\n");
     }
 
     private JPanel putInTitledScrollPane(JComponent component, String title) {
