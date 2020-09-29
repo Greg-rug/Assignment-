@@ -13,13 +13,13 @@ public class ConnectionHandler implements Runnable, PropertyChangeListener {
     public static final String DISCONNECT_SIGNAL = "DISCONNECT_ME";
 
     private final Socket socket;
-    private final MessageFeed messageFeed;
+    private final Feed<String> messageFeed;
     private final PrintWriter out;
     private int chatRoomPortNumber;
-    private ArrayListFeed portNumbers;
+    private Feed<Integer> portNumbers;
     private boolean isChatRoom;
 
-    public ConnectionHandler(Socket socket, MessageFeed messageFeed) throws IOException {
+    public ConnectionHandler(Socket socket, Feed<String> messageFeed) throws IOException {
         out = new PrintWriter(socket.getOutputStream(), true);
         messageFeed.addListener(this);
         chatRoomPortNumber = -2;
@@ -28,8 +28,8 @@ public class ConnectionHandler implements Runnable, PropertyChangeListener {
         isChatRoom = true;
     }
 
-    public ConnectionHandler(Socket socket, MessageFeed messageFeed,
-                             ArrayListFeed portNumbers) throws IOException {
+    public ConnectionHandler(Socket socket, Feed<String> messageFeed,
+                             Feed<Integer> portNumbers) throws IOException {
         this(socket, messageFeed);
         portNumbers.addListener(this);
         chatRoomPortNumber = -1;
@@ -55,19 +55,19 @@ public class ConnectionHandler implements Runnable, PropertyChangeListener {
                     return;
                 }
                 String botName = line;
-                messageFeed.setMessage("BOT " + botName + " has joined the chatroom");
+                messageFeed.add("BOT " + botName + " has joined the chatroom");
                 while ((line = in.readLine()) != null && !line.equals(DISCONNECT_SIGNAL)) {
-                    messageFeed.setMessage("BOT " + botName + ": " +line);
+                    messageFeed.add("BOT " + botName + ": " +line);
                 }
-                messageFeed.setMessage("BOT " + botName + " has disconnected");
+                messageFeed.add("BOT " + botName + " has disconnected");
             }
         } catch (IOException e) {
-            messageFeed.setMessage("TCP Error");
+            messageFeed.add("TCP Error");
         } finally {
             try {
                 socket.close();
             } catch (IOException e) {
-                messageFeed.setMessage("Cannot close socket");
+                messageFeed.add("Cannot close socket");
             }
         }
     }
@@ -79,9 +79,9 @@ public class ConnectionHandler implements Runnable, PropertyChangeListener {
             if (chatRoomPortNumber > 0) {
                 out.println(chatRoomPortNumber);
                 if (words[2].equals("0")) {
-                    messageFeed.setMessage("BOT " + words[1] + " is joining the room at " + chatRoomPortNumber);
+                    messageFeed.add("BOT " + words[1] + " is joining the room at " + chatRoomPortNumber);
                 } else {
-                    messageFeed.setMessage("BOT " + words[1] + " is changing the room to " + chatRoomPortNumber);
+                    messageFeed.add("BOT " + words[1] + " is changing the room to " + chatRoomPortNumber);
                 }
             }
         }
@@ -89,16 +89,16 @@ public class ConnectionHandler implements Runnable, PropertyChangeListener {
             try {
                 chatRoomPortNumber = Integer.parseInt(words[2]);
                 portNumbers.add(chatRoomPortNumber);
-                messageFeed.setMessage(words[1] + " is listening at port " + words[2]);
+                messageFeed.add(words[1] + " is listening at port " + words[2]);
             } catch (NumberFormatException nfe) {
-                messageFeed.setMessage("CHATROOM " + words[1] + " sent incorrectly formatted string, unable to connect.");
+                messageFeed.add("CHATROOM " + words[1] + " sent incorrectly formatted string, unable to connect.");
             }
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (isChatRoom) out.println(messageFeed.getMessage());
+        if (isChatRoom) out.println(messageFeed.getLast());
     }
 
 }

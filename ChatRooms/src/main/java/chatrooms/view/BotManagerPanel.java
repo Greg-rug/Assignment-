@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class BotManagerPanel extends JPanel {
 
-    private BotManager botManager;
+    private final BotManager botManager;
     private final int GAP = 3;
 
     public BotManagerPanel(BotManager botManager) {

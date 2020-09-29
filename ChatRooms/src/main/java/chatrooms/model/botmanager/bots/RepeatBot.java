@@ -10,7 +10,7 @@ public class RepeatBot extends Bot {
 
     @Override
     public String nextString() {
-        String line = messageFeed.getMessage();
+        String line = messageFeed.getLast();
         if (line != null) {
             int from = 0;
             if (line.contains(": ")) {

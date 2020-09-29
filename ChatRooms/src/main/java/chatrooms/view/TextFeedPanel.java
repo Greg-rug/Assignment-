@@ -1,6 +1,6 @@
 package chatrooms.view;
 
-import chatrooms.model.MessageFeed;
+import chatrooms.model.Feed;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 
 public class TextFeedPanel extends JPanel implements PropertyChangeListener {
 
-    private final MessageFeed messageFeed;
+    private final Feed<String> messageFeed;
     private final JTextArea outputTextArea;
 
     private final int ROWS = 23;
@@ -17,7 +17,7 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
     private final int GAP = 3;
 
 
-    public TextFeedPanel(MessageFeed messageFeed, String title) {
+    public TextFeedPanel(Feed<String> messageFeed, String title) {
         this.messageFeed = messageFeed;
         messageFeed.addListener(this);
 
@@ -30,7 +30,7 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
 
         add(putInTitledScrollPane(outputTextArea, title));
 
-        outputTextArea.append(messageFeed.getMessage() + "\n");
+        outputTextArea.append(messageFeed.getLast() + "\n");
     }
 
     private JPanel putInTitledScrollPane(JComponent component, String title) {
@@ -42,6 +42,6 @@ public class TextFeedPanel extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        outputTextArea.append(messageFeed.getMessage() + "\n");
+        outputTextArea.append(messageFeed.getLast() + "\n");
     }
 }

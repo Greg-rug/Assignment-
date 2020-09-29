@@ -1,7 +1,6 @@
 package chatrooms.model.server;
 
-import chatrooms.model.ArrayListFeed;
-import chatrooms.model.MessageFeed;
+import chatrooms.model.Feed;
 import chatrooms.model.ConnectionHandler;
 import chatrooms.view.TextFeedPanel;
 
@@ -17,8 +16,8 @@ public class Server {
     public static final int PORT_NUMBER = 58965;
     private static final int MAX_CONNECTIONS = 100;
 
-    private final ArrayListFeed portNumbers;
-    private final MessageFeed messageFeed;
+    private final Feed<Integer> portNumbers;
+    private final Feed<String> messageFeed;
     private final ExecutorService executorService;
 
     /* DEMO questions
@@ -27,23 +26,22 @@ public class Server {
     */
 
     public Server() {
-        portNumbers = new ArrayListFeed();
-        messageFeed = new MessageFeed();
+        portNumbers = new Feed<>();
+        messageFeed = new Feed<>();
         executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
     }
 
     public void start() {
         setupGUI();
         try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {
-            messageFeed.setMessage("Server successfully started at port " + PORT_NUMBER);
+            messageFeed.add("Server successfully started at port " + PORT_NUMBER);
             while (true) {
                 Socket socket = serverSocket.accept();
                 executorService.submit(new ConnectionHandler(socket, messageFeed, portNumbers));
             }
         } catch (IOException e) {
-            messageFeed.setMessage("Connection error, server shuts down.");
+            messageFeed.add("Connection error, server shuts down.");
         }
-        System.exit(0);
     }
 
     private void setupGUI() {

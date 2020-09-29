@@ -1,6 +1,6 @@
 package chatrooms.model.botmanager;
 
-import chatrooms.model.MessageFeed;
+import chatrooms.model.Feed;
 import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
 
@@ -16,7 +16,7 @@ public abstract class Bot implements Runnable {
 
     private static final double CHANCE_TO_LEAVE = 0.3;
 
-    protected final MessageFeed messageFeed;
+    protected final Feed<String> messageFeed;
     protected final String name;
     private final boolean isLocalBot;
     private boolean kill;
@@ -24,7 +24,7 @@ public abstract class Bot implements Runnable {
     private PrintWriter out;
 
     public Bot (String name, boolean isLocalBot) {
-        messageFeed = new MessageFeed();
+        messageFeed = new Feed<>();
         this.name = name;
         this.isLocalBot = isLocalBot;
         kill = false;
@@ -62,7 +62,7 @@ public abstract class Bot implements Runnable {
             try {
                 while (!kill) {
                     while(in.ready()) {
-                        messageFeed.setMessage(in.readLine());
+                        messageFeed.add(in.readLine());
                     }
                     send(nextString());
                     if (kill || (!isLocalBot && random.nextFloat() < CHANCE_TO_LEAVE)) throw new InterruptedException();
@@ -109,7 +109,7 @@ public abstract class Bot implements Runnable {
 
     private void send(String s) {
         out.println(s);
-        messageFeed.setMessage(s);
+        messageFeed.add(s);
     }
 
 }

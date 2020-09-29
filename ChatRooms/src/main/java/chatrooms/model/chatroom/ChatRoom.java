@@ -1,6 +1,6 @@
 package chatrooms.model.chatroom;
 
-import chatrooms.model.MessageFeed;
+import chatrooms.model.Feed;
 import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
 import chatrooms.view.TextFeedPanel;
@@ -18,14 +18,14 @@ public class ChatRoom {
 
     private static final int MAX_CONNECTIONS = 20;
 
-    private final MessageFeed messageFeed;
+    private final Feed<String> messageFeed;
     private int portNumber;
     private final String name;
     private final ExecutorService executorService;
 
     public ChatRoom(String name) {
         this.name = name;
-        messageFeed = new MessageFeed();
+        messageFeed = new Feed<>();
         executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
     }
 
@@ -39,7 +39,7 @@ public class ChatRoom {
             out.close();
             socketMS.close();
         } catch (IOException e) {
-            messageFeed.setMessage("Unable to make connection to main server.");
+            messageFeed.add("Unable to make connection to main server.");
             return false;
         }
         return true;
@@ -50,13 +50,13 @@ public class ChatRoom {
         try (ServerSocket ss = new ServerSocket(0)) {
             portNumber = ss.getLocalPort();
             if (!reportPortNumber()) return;
-            messageFeed.setMessage("Chatroom " + name + " starts");
+            messageFeed.add("Chatroom " + name + " starts");
             while (true) {
                 Socket socket = ss.accept();
                 executorService.submit(new ConnectionHandler(socket, messageFeed));
             }
         } catch (IOException e) {
-            messageFeed.setMessage("Network error");
+            messageFeed.add("Network error");
         }
     }
 
