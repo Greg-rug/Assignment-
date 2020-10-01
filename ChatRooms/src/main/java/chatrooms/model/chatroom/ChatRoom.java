@@ -1,7 +1,7 @@
 package chatrooms.model.chatroom;
 
+import chatrooms.controller.server.ClientType;
 import chatrooms.model.Feed;
-import chatrooms.model.ConnectionHandler;
 import chatrooms.model.server.Server;
 
 import java.io.IOException;
@@ -14,49 +14,90 @@ import java.util.concurrent.Executors;
 
 public class ChatRoom {
 
-    private static final int MAX_CONNECTIONS = 20;
+    /**
+     * Signal send to the bots when the session is ending
+     */
+    public static final String END_SIGNAL = "Ending_the_session";
 
     private final Feed<String> messageFeed;
     private int portNumber;
     private final String name;
     private final ExecutorService executorService;
 
+    /**
+     * Constructor
+     * @param name of the Chatroom
+     */
     public ChatRoom(String name) {
         this.name = name;
         messageFeed = new Feed<>();
-        executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
+        executorService = Executors.newFixedThreadPool(Server.MAX_CONNECTIONS);
+        portNumber = 0;
     }
 
-    public boolean reportPortNumber() {
+    /**
+     * reports message to the server
+     * @param message to be reported
+     * @return true if successful, false otherwise
+     */
+    private boolean reportStatusToServer(String message) {
         Socket socketMS = new Socket();
         try {
             socketMS.connect(new InetSocketAddress("localhost", Server.PORT_NUMBER), 1000);
             if (!socketMS.isConnected()) throw new IOException();
             PrintWriter out = new PrintWriter(socketMS.getOutputStream(), true);
-            out.println("CHATROOM;" + name + ";" + portNumber);
+            out.println(message);
             out.close();
             socketMS.close();
         } catch (IOException e) {
-            messageFeed.add("Unable to make connection to main server.");
+            messageFeed.add("Unable to make connection to the main server.");
             return false;
         }
+        closeSocket(socketMS);
         return true;
     }
 
+    /**
+     * report to the server that the chatroom is closing
+     */
+    public void endSession() {
+        reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + ThreadedConnectionChatRoom.DISCONNECT_SIGNAL);
+        messageFeed.add(END_SIGNAL);
+    }
+
+    /**
+     * starts the chatroom - to listen to the connections
+     */
     public void start() {
-        try (ServerSocket ss = new ServerSocket(0)) {
+        try (ServerSocket ss = new ServerSocket(portNumber)) {
             portNumber = ss.getLocalPort();
-            if (!reportPortNumber()) return;
+            if (!reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + portNumber)) return;
             messageFeed.add("Chatroom " + name + " starts");
             while (true) {
                 Socket socket = ss.accept();
-                executorService.submit(new ConnectionHandler(socket, messageFeed));
+                executorService.submit(new ThreadedConnectionChatRoom(socket, messageFeed));
             }
         } catch (IOException e) {
             messageFeed.add("Network error");
         }
     }
 
+    /**
+     * closes the socket if it's open
+     * @param socket to be closed
+     */
+    private void closeSocket(Socket socket) {
+        try {
+            if (socket.isConnected()) socket.close();
+        } catch (IOException e) {
+            messageFeed.add("Unable to close the socket.");
+        }
+    }
+
+    /**
+     * getter for message feed
+     * @return message feed
+     */
     public Feed<String> getMessageFeed() {
         return messageFeed;
     }

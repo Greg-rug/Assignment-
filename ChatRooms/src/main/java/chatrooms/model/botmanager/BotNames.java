@@ -1,8 +1,12 @@
 package chatrooms.model.botmanager;
 
-import java.util.ArrayList;
+import chatrooms.model.Feed;
+
 import java.util.stream.IntStream;
 
+/**
+ * Enum of bot names
+ */
 public enum BotNames {
 
     Albert,
@@ -68,8 +72,11 @@ public enum BotNames {
     Will,
     Wyatt;
 
-    public static ArrayList<String> getAllBotNames() {
-        ArrayList<String> names = new ArrayList<>();
+    /**
+     * @return collection of all bot names in the enum
+     */
+    public static Feed<String> getAllBotNames() {
+        Feed<String> names = new Feed<>();
         IntStream.range(0, values().length).forEach(i -> names.add(values()[i].toString()));
         return names;
     }
