@@ -67,4 +67,12 @@ public class Server {
     public Feed<String> getMessageFeed() {
         return messageFeed;
     }
+
+    /**
+     * getter for running
+     * @return true if is running false otherwise
+     */
+    public boolean isRunning() {
+        return running;
+    }
 }

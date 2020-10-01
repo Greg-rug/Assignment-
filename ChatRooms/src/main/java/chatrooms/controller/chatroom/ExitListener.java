@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
  */
 public class ExitListener extends WindowAdapter {
 
-    ChatRoom chatRoom;
+    private final ChatRoom chatRoom;
 
     /**
      * Constructor

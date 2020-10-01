@@ -28,7 +28,7 @@ public class ThreadedConnectionChatRoom extends ThreadedConnection implements Pr
      * Constructor
      * @param socket socket connected to bot
      * @param messageFeed of chatroom
-     * @throws IOException connectio problem
+     * @throws IOException connection problem
      */
     public ThreadedConnectionChatRoom(Socket socket, Feed<String> messageFeed) throws IOException {
         super(socket, messageFeed);

@@ -36,6 +36,23 @@ public class ChatRoom {
     }
 
     /**
+     * starts the chatroom - to listen to the connections
+     */
+    public void start() {
+        try (ServerSocket ss = new ServerSocket(portNumber)) {
+            portNumber = ss.getLocalPort();
+            if (!reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + portNumber)) return;
+            messageFeed.add("Chatroom " + name + " starts");
+            while (true) {
+                Socket socket = ss.accept();
+                executorService.submit(new ThreadedConnectionChatRoom(socket, messageFeed));
+            }
+        } catch (IOException e) {
+            messageFeed.add("Network error");
+        }
+    }
+
+    /**
      * reports message to the server
      * @param message to be reported
      * @return true if successful, false otherwise
@@ -43,7 +60,7 @@ public class ChatRoom {
     private boolean reportStatusToServer(String message) {
         Socket socketMS = new Socket();
         try {
-            socketMS.connect(new InetSocketAddress("localhost", Server.PORT_NUMBER), 1000);
+            socketMS.connect(new InetSocketAddress(Server.IP, Server.PORT_NUMBER), 1000);
             if (!socketMS.isConnected()) throw new IOException();
             PrintWriter out = new PrintWriter(socketMS.getOutputStream(), true);
             out.println(message);
@@ -63,23 +80,6 @@ public class ChatRoom {
     public void endSession() {
         reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + ThreadedConnectionChatRoom.DISCONNECT_SIGNAL);
         messageFeed.add(END_SIGNAL);
-    }
-
-    /**
-     * starts the chatroom - to listen to the connections
-     */
-    public void start() {
-        try (ServerSocket ss = new ServerSocket(portNumber)) {
-            portNumber = ss.getLocalPort();
-            if (!reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + portNumber)) return;
-            messageFeed.add("Chatroom " + name + " starts");
-            while (true) {
-                Socket socket = ss.accept();
-                executorService.submit(new ThreadedConnectionChatRoom(socket, messageFeed));
-            }
-        } catch (IOException e) {
-            messageFeed.add("Network error");
-        }
     }
 
     /**

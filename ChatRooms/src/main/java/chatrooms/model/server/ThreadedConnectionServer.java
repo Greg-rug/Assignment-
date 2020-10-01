@@ -18,7 +18,7 @@ public class ThreadedConnectionServer extends ThreadedConnection {
      * Constructor
      * @param socket of the connection
      * @param messageFeed of the server
-     * @param chatRooms collection of available chatrooms
+     * @param chatRooms collection of available chat rooms
      */
     public ThreadedConnectionServer(Socket socket, Feed<String> messageFeed, Feed<Pair<String, Integer>> chatRooms) {
         super(socket, messageFeed);

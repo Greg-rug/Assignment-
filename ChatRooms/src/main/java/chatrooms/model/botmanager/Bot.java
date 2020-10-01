@@ -67,7 +67,7 @@ public abstract class Bot implements Runnable {
         if (port == -1) return null;
         Socket socketChatRoom = new Socket();
         try {
-            socketChatRoom.connect(new InetSocketAddress("localhost", port), 1000);
+            socketChatRoom.connect(new InetSocketAddress(Server.IP, port), 1000);
             in = new BufferedReader(new InputStreamReader(socketChatRoom.getInputStream()));
             out = new PrintWriter(socketChatRoom.getOutputStream(), true);
             if (!socketChatRoom.isConnected()) throw new IOException();

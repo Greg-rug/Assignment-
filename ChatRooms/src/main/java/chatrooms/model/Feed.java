@@ -101,7 +101,7 @@ public class Feed<E> extends ArrayList<E> {
      */
     @Override
     public synchronized E remove(int index) {
-        if (index > 0 && index < size()) {
+        if (index >= 0 && index < size()) {
             PropertyChangeEvent event = new PropertyChangeEvent(this, "removeElement",
                     null, null);
             changeSupport.firePropertyChange(event);
