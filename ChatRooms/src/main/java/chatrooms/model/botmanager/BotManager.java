@@ -15,12 +15,12 @@ public class BotManager {
     public static final double CHANCE_TO_LEAVE = 0.3;
 
     /**
-     * Maximal interval of bot waiting before sending the next mwssage in mili seconds
+     * Maximal interval of bot waiting before sending the next message in milli seconds
      */
     public static final int MAX_INTERVAL = 10000;
 
     /**
-     * Minimal interval of bot waiting before sending the next mwssage in mili seconds
+     * Minimal interval of bot waiting before sending the next message in milli seconds
      */
     public static final int MIN_INTERVAL = 3000;
 
@@ -57,5 +57,13 @@ public class BotManager {
     public void killAllBots() {
         for (Bot b: bots) b.setKill(true);
         executorService.shutdownNow();
+    }
+
+    /**
+     * getter for arraylist of bots
+     * @return arraylist of bots
+     */
+    public ArrayList<Bot> getBots() {
+        return bots;
     }
 }

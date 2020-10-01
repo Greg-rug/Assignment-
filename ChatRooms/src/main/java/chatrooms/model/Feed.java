@@ -28,7 +28,7 @@ public class Feed<E> extends ArrayList<E> {
 
     /**
      * @param index of the element
-     * @return the elemnt on the index
+     * @return the element on the index
      */
     @Override
     public synchronized E get(int index) {

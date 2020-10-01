@@ -11,4 +11,11 @@ public class BotManagerTest {
         BotManager botManager = new BotManager(15);
         assertNotNull(botManager);
     }
+
+    @Test
+    public void testSpawnBots() {
+        BotManager botManager = new BotManager(15);
+        botManager.spawnBots();
+        assertEquals(15, botManager.getBots().size());
+    }
 }

@@ -23,6 +23,7 @@ public class ChatRoom {
     private int portNumber;
     private final String name;
     private final ExecutorService executorService;
+    private boolean running;
 
     /**
      * Constructor
@@ -33,17 +34,19 @@ public class ChatRoom {
         messageFeed = new Feed<>();
         executorService = Executors.newFixedThreadPool(Server.MAX_CONNECTIONS);
         portNumber = 0;
+        running = false;
     }
 
     /**
      * starts the chatroom - to listen to the connections
      */
     public void start() {
+        running = true;
         try (ServerSocket ss = new ServerSocket(portNumber)) {
             portNumber = ss.getLocalPort();
             if (!reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + portNumber)) return;
             messageFeed.add("Chatroom " + name + " starts");
-            while (true) {
+            while (running) {
                 Socket socket = ss.accept();
                 executorService.submit(new ThreadedConnectionChatRoom(socket, messageFeed));
             }
@@ -78,6 +81,7 @@ public class ChatRoom {
      * report to the server that the chatroom is closing
      */
     public void endSession() {
+        running = false;
         reportStatusToServer(ClientType.CHATROOM + ";" + name + ";" + ThreadedConnectionChatRoom.DISCONNECT_SIGNAL);
         messageFeed.add(END_SIGNAL);
     }
@@ -100,5 +104,29 @@ public class ChatRoom {
      */
     public Feed<String> getMessageFeed() {
         return messageFeed;
+    }
+
+    /**
+     * getter for port number
+     * @return port number of the chat room
+     */
+    public int getPortNumber() {
+        return portNumber;
+    }
+
+    /**
+     * getter for name
+     * @return name of the chatroom
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * getter for running
+     * @return true if chatroom is running
+     */
+    public boolean isRunning() {
+        return running;
     }
 }

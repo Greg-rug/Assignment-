@@ -20,7 +20,7 @@ public class RandomBot extends Bot {
     private final static int MAX_LENGTH = 10;
 
     /**
-     * Depth of how many previous messages bot consideres when composing new message
+     * Depth of how many previous messages bot considers when composing new message
      */
     private final static int MAX_DEPTH = 5;
 

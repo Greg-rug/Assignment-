@@ -20,7 +20,7 @@ public class RepeatBot extends Bot {
      * @return last message in the message feed without the name of BOT who sent the previous message
      */
     @Override
-    public String nextString() {
+    protected String nextString() {
         String line = messageFeed.getLast();
         if (line != null) {
             int from = 0;

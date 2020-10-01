@@ -156,7 +156,7 @@ public abstract class Bot implements Runnable {
     }
 
     /**
-     * sends bot's message and add's it to bot's message feed
+     * sends bot's message and adds it to bot's message feed
      * @param s string to be send
      */
     private void send(String s) {
@@ -172,4 +172,35 @@ public abstract class Bot implements Runnable {
         this.kill = kill;
     }
 
+    /**
+     * getter for message feed
+     * @return message feed
+     */
+    public Feed<String> getMessageFeed() {
+        return messageFeed;
+    }
+
+    /**
+     * Getter for name
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * getter for isLocalBot
+     * @return true if is local bot
+     */
+    public boolean isLocalBot() {
+        return isLocalBot;
+    }
+
+    /**
+     * getter for isKill
+     * @return true if isKill
+     */
+    public boolean isKill() {
+        return kill;
+    }
 }

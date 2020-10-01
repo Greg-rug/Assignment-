@@ -57,6 +57,7 @@ public class Server {
             }
         } catch (IOException e) {
             messageFeed.add("Connection error, server shuts down.");
+            e.printStackTrace();
         }
     }
 
@@ -74,5 +75,13 @@ public class Server {
      */
     public boolean isRunning() {
         return running;
+    }
+
+    /**
+     * getter for chat rooms
+     * @return feed of chat rooms as pairs of strings and integers
+     */
+    public Feed<Pair<String, Integer>> getChatRooms() {
+        return chatRooms;
     }
 }

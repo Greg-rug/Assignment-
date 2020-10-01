@@ -20,7 +20,7 @@ public class NormalBot extends Bot {
      * @return simple string that bot is repeating
      */
     @Override
-    public String nextString() {
+    protected String nextString() {
         return ("I am totally normal - " + name);
     }
 
