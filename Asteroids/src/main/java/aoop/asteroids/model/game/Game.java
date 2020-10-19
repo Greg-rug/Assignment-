@@ -14,11 +14,8 @@ import java.util.Collection;
  * {@link GameUpdater}, which runs in its own thread, and manages the main game loop and physics updates.
  */
 public class Game extends ObservableGame {
-	/**
-	 * The spaceship object that the player is in control of.
-	 */
-	private Spaceship ship;
 
+	private Spaceship ship;
 	/**
 	 * The list of all bullets currently active in the game.
 	 */
@@ -30,11 +27,16 @@ public class Game extends ObservableGame {
 	private Collection<Asteroid> asteroids;
 
 	/**
+	 * The list of all spaceships. First one is the player, next are other players
+	 */
+	private ArrayList<Spaceship> spaceships;
+
+	/**
 	 * Indicates whether or not the game is running. Setting this to false causes the game to exit its loop and quit.
 	 */
 	private volatile boolean running = false;
 
-	private boolean asteroidsOnly = true;
+	private boolean asteroidsOnly;
 
 	/**
 	 * The game updater thread, which is responsible for updating the game's state as time goes on.
@@ -45,8 +47,8 @@ public class Game extends ObservableGame {
 	 * Constructs a new game, with a new spaceship and all other model data in its default starting state.
 	 */
 	public Game() {
-		this.ship = new Spaceship();
-		this.initializeGameData();
+		initializeGameData();
+		asteroidsOnly = true;
 	}
 
 	/**
@@ -54,30 +56,39 @@ public class Game extends ObservableGame {
 	 * default starting state before beginning a new game.
 	 */
 	public void initializeGameData() {
-		this.bullets = new ArrayList<>();
-		this.asteroids = new ArrayList<>();
-		this.ship.reset();
+		bullets = new ArrayList<>();
+		asteroids = new ArrayList<>();
+		spaceships = new ArrayList<>();
+		//Spaceship ship = new Spaceship();
+		ship = new Spaceship();
+		ship.reset();
+		spaceships.add(ship);
 	}
 
 	/**
 	 * @return The game's spaceship.
 	 */
 	public Spaceship getSpaceship() {
-		return this.ship;
+		if (spaceships.size() > 0) return ship;
+		return null;
 	}
 
 	/**
 	 * @return The collection of asteroids in the game.
 	 */
 	public Collection<Asteroid> getAsteroids() {
-		return this.asteroids;
+		return asteroids;
 	}
 
 	/**
 	 * @return The collection of bullets in the game.
 	 */
 	public Collection<Bullet> getBullets () {
-		return this.bullets;
+		return bullets;
+	}
+
+	public ArrayList<Spaceship> getSpaceships() {
+		return spaceships;
 	}
 
 	public boolean isAsteroidsOnly() {
@@ -92,14 +103,14 @@ public class Game extends ObservableGame {
 	 * @return Whether or not the game is running.
 	 */
 	public synchronized boolean isRunning() {
-		return this.running;
+		return running;
 	}
 
 	/**
 	 * @return True if the player's ship has been destroyed, or false otherwise.
 	 */
 	public boolean isGameOver() {
-		return this.ship.isDestroyed();
+		return getSpaceship().isDestroyed();
 	}
 
 	/**
@@ -107,10 +118,10 @@ public class Game extends ObservableGame {
 	 * user input and physics updates. Only if the game isn't currently running, that is.
 	 */
 	public void start() {
-		if (!this.running) {
-			this.running = true;
-			this.gameUpdaterThread = new Thread(new GameUpdater(this));
-			this.gameUpdaterThread.start();
+		if (!running) {
+			running = true;
+			gameUpdaterThread = new Thread(new GameUpdater(this));
+			gameUpdaterThread.start();
 		}
 	}
 
@@ -118,14 +129,14 @@ public class Game extends ObservableGame {
 	 * Tries to quit the game, if it is running.
 	 */
 	public void quit() {
-		if (this.running) {
+		if (running) {
 			try { // Attempt to wait for the game updater to exit its game loop.
-				this.gameUpdaterThread.join(100);
+				gameUpdaterThread.join(100);
 			} catch (InterruptedException exception) {
 				System.err.println("Interrupted while waiting for the game updater thread to finish execution.");
 			} finally {
-				this.running = false;
-				this.gameUpdaterThread = null; // Throw away the game updater thread and let the GC remove it.
+				running = false;
+				gameUpdaterThread = null; // Throw away the game updater thread and let the GC remove it.
 			}
 		}
 	}

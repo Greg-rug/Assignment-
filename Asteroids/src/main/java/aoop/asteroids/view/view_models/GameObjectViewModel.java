@@ -1,7 +1,7 @@
 package aoop.asteroids.view.view_models;
 
 import aoop.asteroids.control.GameUpdater;
-import aoop.asteroids.model.GameObject;
+import aoop.asteroids.model.game.GameObject;
 
 import java.awt.*;
 

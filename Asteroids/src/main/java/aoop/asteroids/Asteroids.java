@@ -1,8 +1,10 @@
 package aoop.asteroids;
 
-import aoop.asteroids.control.GameUpdater;
-import aoop.asteroids.control.NewGameAction;
-import aoop.asteroids.model.Game;
+import aoop.asteroids.control.*;
+import aoop.asteroids.control.menu.MenuCommandHandler;
+import aoop.asteroids.control.menu.MenuItem;
+import aoop.asteroids.control.menu.MenuItemAction;
+import aoop.asteroids.model.game.Game;
 import aoop.asteroids.view.AsteroidsFrame;
 import aoop.asteroids.view.AsteroidsPanel;
 
@@ -42,12 +44,11 @@ public class Asteroids {
 
 		// Create the game model and display frame.
 		Game game = new Game();
+		game.initializeGameData();
 		AsteroidsFrame frame = new AsteroidsFrame(game);
 
 		// Generate a new action event so that we can use the NewGameAction to start a new game.
-		new NewGameAction(game).actionPerformed(
-				// Just use a dummy action; NewGameAction doesn't care about the action event's properties.
-				new ActionEvent(frame, ActionEvent.ACTION_PERFORMED, null)
-		);
+		new MenuItemAction(new MenuCommandHandler(game)).actionPerformed(
+				new ActionEvent(frame, ActionEvent.ACTION_PERFORMED, MenuItem.MAIN_MENU.toString()));
 	}
 }

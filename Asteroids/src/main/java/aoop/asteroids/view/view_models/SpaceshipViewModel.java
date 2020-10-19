@@ -1,6 +1,6 @@
 package aoop.asteroids.view.view_models;
 
-import aoop.asteroids.model.Spaceship;
+import aoop.asteroids.model.game.Spaceship;
 import aoop.asteroids.util.PolarCoordinate;
 
 import java.awt.*;

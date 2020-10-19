@@ -98,26 +98,26 @@ public class Spaceship extends GameObject {
 	 */
 	Spaceship() {
 		super(AsteroidsFrame.WINDOW_SIZE.width / 2,AsteroidsFrame.WINDOW_SIZE.height / 2, 0, 0, 15);
-		this.reset();
+		reset();
 	}
 
 	/**
 	 * Resets all parameters to default values, so a new game can be started.
 	 */
 	public void reset() {
-		this.getLocation().x = AsteroidsFrame.WINDOW_SIZE.width / 2;
-		this.getLocation().y = AsteroidsFrame.WINDOW_SIZE.height / 2;
-		this.getVelocity().x = 0;
-		this.getVelocity().y = 0;
-		this.direction = 0;
-		this.isFiring = false;
-		this.accelerateKeyPressed = false;
-		this.turnLeftKeyPressed = false;
-		this.turnRightKeyPressed = false;
-		this.destroyed = false;
-		this.weaponCooldownRemaining = 0;
-		this.score = 0;
-		this.energy = ENERGY_CAPACITY;
+		getLocation().x = AsteroidsFrame.WINDOW_SIZE.width / 2;
+		getLocation().y = AsteroidsFrame.WINDOW_SIZE.height / 2;
+		getVelocity().x = 0;
+		getVelocity().y = 0;
+		direction = 0;
+		isFiring = false;
+		accelerateKeyPressed = false;
+		turnLeftKeyPressed = false;
+		turnRightKeyPressed = false;
+		destroyed = false;
+		weaponCooldownRemaining = 0;
+		score = 0;
+		energy = ENERGY_CAPACITY;
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class Spaceship extends GameObject {
 	 *	@param b new value of the field.
 	 */
 	public void setIsFiring(boolean b) {
-		this.isFiring = b;
+		isFiring = b;
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class Spaceship extends GameObject {
 	 *	@param b new value of the field.
 	 */
 	public void setTurnLeftKeyPressed(boolean b) {
-		this.turnLeftKeyPressed = b;
+		turnLeftKeyPressed = b;
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class Spaceship extends GameObject {
 	 *	@param b new value of the field.
 	 */
 	public void setTurnRightKeyPressed(boolean b) {
-		this.turnRightKeyPressed = b;
+		turnRightKeyPressed = b;
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class Spaceship extends GameObject {
 	 *	@param b new value of the field.
 	 */
 	public void setAccelerateKeyPressed(boolean b) {
-		this.accelerateKeyPressed = b;
+		accelerateKeyPressed = b;
 	}
 
 	/**
@@ -163,20 +163,19 @@ public class Spaceship extends GameObject {
 	@Override 
 	public void nextStep() {
 		super.nextStep();
-
-		this.attemptToTurn();
-		this.attemptToAccelerate();
-		this.dampenVelocity();
-		this.restWeapon();
-		this.rechargeEnergy();
+		attemptToTurn();
+		attemptToAccelerate();
+		dampenVelocity();
+		restWeapon();
+		rechargeEnergy();
 	}
 
 	/**
 	 * Recharges the ship's energy during a game tick. The energy is renewable, in case you were wondering.
 	 */
 	private void rechargeEnergy() {
-		this.energy += ENERGY_GENERATION;
-		this.energy = Math.min(this.energy, ENERGY_CAPACITY);
+		energy += ENERGY_GENERATION;
+		energy = Math.min(energy, ENERGY_CAPACITY);
 	}
 
 	/**
@@ -184,8 +183,8 @@ public class Spaceship extends GameObject {
 	 * be fired again.
 	 */
 	private void restWeapon() {
-		if (this.weaponCooldownRemaining != 0) {
-			this.weaponCooldownRemaining--;
+		if (weaponCooldownRemaining != 0) {
+			weaponCooldownRemaining--;
 		}
 	}
 
@@ -193,8 +192,8 @@ public class Spaceship extends GameObject {
 	 * Dampens the ship's velocity, i.e. slows it down slightly, so that you don't drift endlessly across the screen.
 	 */
 	private void dampenVelocity() {
-		this.getVelocity().x *= VELOCITY_DAMPENING_COEFFICIENT;
-		this.getVelocity().y *= VELOCITY_DAMPENING_COEFFICIENT;
+		getVelocity().x *= VELOCITY_DAMPENING_COEFFICIENT;
+		getVelocity().y *= VELOCITY_DAMPENING_COEFFICIENT;
 	}
 
 	/**
@@ -203,10 +202,11 @@ public class Spaceship extends GameObject {
 	 * have enough energy, and finally, the ship must not exceed its maximum set speed.
 	 */
 	private void attemptToAccelerate() {
-		if (this.accelerateKeyPressed && this.energy >= ACCELERATION_ENERGY_COST && this.getSpeed() < MAXIMUM_SPEED) {
-			this.getVelocity().x += Math.sin(direction) * ACCELERATION_PER_TICK;
-			this.getVelocity().y -= Math.cos(direction) * ACCELERATION_PER_TICK; // Note that we subtract here, because the y-axis on the screen is flipped, compared to normal math.
-			this.energy -= ACCELERATION_ENERGY_COST;
+		if (accelerateKeyPressed && energy >= ACCELERATION_ENERGY_COST && getSpeed() < MAXIMUM_SPEED) {
+			System.out.println("accelerating");
+			getVelocity().x += Math.sin(direction) * ACCELERATION_PER_TICK;
+			getVelocity().y -= Math.cos(direction) * ACCELERATION_PER_TICK; // Note that we subtract here, because the y-axis on the screen is flipped, compared to normal math.
+			energy -= ACCELERATION_ENERGY_COST;
 		}
 	}
 
@@ -216,18 +216,18 @@ public class Spaceship extends GameObject {
 	 * must have enough energy to rotate.
 	 */
 	private void attemptToTurn() {
-		if (this.energy >= TURNING_ENERGY_COST) {
+		if (energy >= TURNING_ENERGY_COST) {
 			boolean didTurn = false;
-			if (this.turnLeftKeyPressed) {
-				this.direction -= ROTATION_PER_TICK;
+			if (turnLeftKeyPressed) {
+				direction -= ROTATION_PER_TICK;
 				didTurn = true;
 			}
-			if (this.turnRightKeyPressed) {
-				this.direction += ROTATION_PER_TICK;
+			if (turnRightKeyPressed) {
+				direction += ROTATION_PER_TICK;
 				didTurn = true;
 			}
 			if (didTurn) {
-				this.energy -= TURNING_ENERGY_COST;
+				energy -= TURNING_ENERGY_COST;
 			}
 		}
 	}
@@ -244,21 +244,21 @@ public class Spaceship extends GameObject {
 	 * @return the direction.
 	 */
 	public double getDirection() {
-		return this.direction;
+		return direction;
 	}
 
 	/**
 	 * @return The percentage of energy that is available on the ship, out of the total capacity.
 	 */
 	public double getEnergyPercentage() {
-		return 100 * this.energy / ENERGY_CAPACITY;
+		return 100 * energy / ENERGY_CAPACITY;
 	}
 
 	/**
 	 * @return true if acceleration button is pressed, false otherwise.
 	 */
 	public boolean isAccelerating()	{
-		return this.accelerateKeyPressed;
+		return accelerateKeyPressed;
 	}
 
 	/**
@@ -266,30 +266,30 @@ public class Spaceship extends GameObject {
 	 * down, and it has enough energy, and the user is pressing the button to fire the weapon.
 	 */
 	public boolean canFireWeapon() {
-		return this.isFiring
-				&& this.weaponCooldownRemaining == 0
-				&& this.energy >= WEAPON_ENERGY_COST;
+		return isFiring
+				&& weaponCooldownRemaining == 0
+				&& energy >= WEAPON_ENERGY_COST;
 	}
 
 	/**
 	 * Sets the fire tick counter to its starting value, to begin a new countdown until the weapon can be used again.
 	 */
 	public void setFired() {
-		this.weaponCooldownRemaining = WEAPON_COOLDOWN_TICKS;
-		this.energy -= WEAPON_ENERGY_COST;
+		weaponCooldownRemaining = WEAPON_COOLDOWN_TICKS;
+		energy -= WEAPON_ENERGY_COST;
 	}
 
 	/**
 	 * Increments score field.
 	 */
 	public void increaseScore() {
-		this.score++;
+		score++;
 	}
 
 	/**
 	 * @return the score.
 	 */
 	public int getScore() {
-		return this.score;
+		return score;
 	}
 }

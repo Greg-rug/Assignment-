@@ -1,6 +1,6 @@
 package aoop.asteroids.control;
 
-import aoop.asteroids.model.Spaceship;
+import aoop.asteroids.model.game.Spaceship;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -51,16 +51,16 @@ public class PlayerKeyListener implements KeyListener {
 	public void keyPressed(KeyEvent event) {
 		switch (event.getKeyCode()) {
 			case ACCELERATION_KEY:
-				this.ship.setAccelerateKeyPressed(true);
+				ship.setAccelerateKeyPressed(true);
 				break;
 			case LEFT_KEY:
-				this.ship.setTurnLeftKeyPressed(true);
+				ship.setTurnLeftKeyPressed(true);
 				break;
 			case RIGHT_KEY:
-				this.ship.setTurnRightKeyPressed(true);
+				ship.setTurnRightKeyPressed(true);
 				break;
 			case FIRE_WEAPON_KEY:
-				this.ship.setIsFiring(true);
+				ship.setIsFiring(true);
 		}
 	}
 
@@ -73,16 +73,16 @@ public class PlayerKeyListener implements KeyListener {
 	public void keyReleased(KeyEvent event) {
 		switch (event.getKeyCode()) {
 			case ACCELERATION_KEY:
-				this.ship.setAccelerateKeyPressed(false);
+				ship.setAccelerateKeyPressed(false);
 				break;
 			case LEFT_KEY:
-				this.ship.setTurnLeftKeyPressed(false);
+				ship.setTurnLeftKeyPressed(false);
 				break;
 			case RIGHT_KEY:
-				this.ship.setTurnRightKeyPressed(false);
+				ship.setTurnRightKeyPressed(false);
 				break;
 			case FIRE_WEAPON_KEY:
-				this.ship.setIsFiring(false);
+				ship.setIsFiring(false);
 		}
 	}
 

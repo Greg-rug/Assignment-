@@ -1,6 +1,6 @@
 package aoop.asteroids.view.view_models;
 
-import aoop.asteroids.model.Bullet;
+import aoop.asteroids.model.game.Bullet;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
