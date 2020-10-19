@@ -1,5 +1,6 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
+import aoop.asteroids.model.game.Bullet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

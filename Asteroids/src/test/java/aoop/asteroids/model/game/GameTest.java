@@ -1,5 +1,9 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
+import aoop.asteroids.model.game.Asteroid;
+import aoop.asteroids.model.game.AsteroidSize;
+import aoop.asteroids.model.game.Bullet;
+import aoop.asteroids.model.game.Game;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;

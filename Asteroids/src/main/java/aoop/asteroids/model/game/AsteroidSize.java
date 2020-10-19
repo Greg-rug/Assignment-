@@ -1,4 +1,4 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
 /**
  * This enumeration defines the different possible sizes of asteroids.

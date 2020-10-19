@@ -1,4 +1,4 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
 import java.awt.*;
 import java.util.ArrayList;

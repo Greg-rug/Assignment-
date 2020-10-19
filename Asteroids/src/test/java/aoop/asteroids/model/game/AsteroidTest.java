@@ -1,5 +1,7 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
+import aoop.asteroids.model.game.Asteroid;
+import aoop.asteroids.model.game.AsteroidSize;
 import aoop.asteroids.view.AsteroidsFrame;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;

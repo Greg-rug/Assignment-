@@ -1,4 +1,4 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
 import aoop.asteroids.control.GameUpdater;
 import aoop.asteroids.game_observer.ObservableGame;
@@ -33,6 +33,8 @@ public class Game extends ObservableGame {
 	 * Indicates whether or not the game is running. Setting this to false causes the game to exit its loop and quit.
 	 */
 	private volatile boolean running = false;
+
+	private boolean asteroidsOnly = true;
 
 	/**
 	 * The game updater thread, which is responsible for updating the game's state as time goes on.
@@ -74,9 +76,16 @@ public class Game extends ObservableGame {
 	/**
 	 * @return The collection of bullets in the game.
 	 */
-	public Collection<Bullet> getBullets ()
-	{
+	public Collection<Bullet> getBullets () {
 		return this.bullets;
+	}
+
+	public boolean isAsteroidsOnly() {
+		return asteroidsOnly;
+	}
+
+	public void setAsteroidsOnly(boolean asteroidsOnly) {
+		this.asteroidsOnly = asteroidsOnly;
 	}
 
 	/**

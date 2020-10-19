@@ -1,4 +1,4 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
 import aoop.asteroids.view.AsteroidsFrame;
 
@@ -22,7 +22,7 @@ public class Spaceship extends GameObject {
 	/**
 	 * The coefficient to multiply the ship's velocity by every tick, so that it slows down.
 	 */
-	public static final double VELOCITY_DAMPENING_COEFFICIENT = 0.99;
+	public static final double VELOCITY_DAMPENING_COEFFICIENT = 0.95;
 
 	/**
 	 * The rate at which the spaceship will speed up, per axis, per tick.

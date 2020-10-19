@@ -1,4 +1,4 @@
-package aoop.asteroids.model;
+package aoop.asteroids.model.game;
 
 /**
  *	The bullet is the ultimate weapon of the player. It has the same mechanics 
