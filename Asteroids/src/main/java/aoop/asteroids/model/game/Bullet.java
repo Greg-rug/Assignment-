@@ -54,9 +54,9 @@ public class Bullet extends GameObject {
 	public void nextStep () {
 		super.nextStep();
 
-		this.stepsLeft--;
-		if (this.stepsLeft <= 0) {
-			this.destroy();
+		stepsLeft--;
+		if (stepsLeft <= 0) {
+			destroy();
 		}
 	}
 

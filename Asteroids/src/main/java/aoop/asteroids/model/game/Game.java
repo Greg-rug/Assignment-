@@ -15,7 +15,6 @@ import java.util.Collection;
  */
 public class Game extends ObservableGame {
 
-	private Spaceship ship;
 	/**
 	 * The list of all bullets currently active in the game.
 	 */
@@ -56,20 +55,23 @@ public class Game extends ObservableGame {
 	 * default starting state before beginning a new game.
 	 */
 	public void initializeGameData() {
+		Spaceship spaceship = null;
+		if (spaceships != null && spaceships.size() > 0) {
+			spaceship = spaceships.get(0);
+		}
 		bullets = new ArrayList<>();
 		asteroids = new ArrayList<>();
 		spaceships = new ArrayList<>();
-		//Spaceship ship = new Spaceship();
-		ship = new Spaceship();
-		ship.reset();
-		spaceships.add(ship);
+		if (spaceship == null) spaceship = new Spaceship();
+		spaceship.reset();
+		spaceships.add(spaceship);
 	}
 
 	/**
 	 * @return The game's spaceship.
 	 */
 	public Spaceship getSpaceship() {
-		if (spaceships.size() > 0) return ship;
+		if (spaceships.size() > 0) return spaceships.get(0);
 		return null;
 	}
 

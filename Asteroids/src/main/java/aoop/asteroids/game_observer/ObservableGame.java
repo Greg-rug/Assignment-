@@ -20,7 +20,7 @@ public abstract class ObservableGame {
 	 * Constructs a new observable game with initially no listeners.
 	 */
 	protected ObservableGame() {
-		this.listeners = new ArrayList<>();
+		listeners = new ArrayList<>();
 	}
 
 	/**
@@ -29,7 +29,7 @@ public abstract class ObservableGame {
 	 * @param listener The listener to add.
 	 */
 	public void addListener(GameUpdateListener listener) {
-		this.listeners.add(listener);
+		listeners.add(listener);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public abstract class ObservableGame {
 	 * @param listener The listener to remove.
 	 */
 	public void removeListener(GameUpdateListener listener) {
-		this.listeners.remove(listener);
+		listeners.remove(listener);
 	}
 
 	/**

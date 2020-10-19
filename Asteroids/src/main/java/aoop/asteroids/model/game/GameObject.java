@@ -21,7 +21,7 @@ public abstract class GameObject {
 	private Point.Double velocity;
 
 	/** Radius of the object. */
-	private double radius;
+	private final double radius;
 
 	/**
 	 * A flag that is set when this object collides with another. This tells the game engine that this object should be
@@ -45,10 +45,10 @@ public abstract class GameObject {
 	 * @param radius Radius of the object.
 	 */
 	protected GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius) {
-		this.location = new Point.Double(locationX, locationY);
-		this.velocity = new Point.Double(velocityX, velocityY);
+		location = new Point.Double(locationX, locationY);
+		velocity = new Point.Double(velocityX, velocityY);
 		this.radius = radius;
-		this.stepsUntilCollisionPossible = this.getDefaultStepsUntilCollisionPossible();
+		stepsUntilCollisionPossible = getDefaultStepsUntilCollisionPossible();
 	}
 
 	/**
@@ -68,10 +68,10 @@ public abstract class GameObject {
 	 * uniform even when performance may suffer.
 	 */
 	public void nextStep() {
-		this.location.x = (AsteroidsFrame.WINDOW_SIZE.width + this.location.x + this.velocity.x) % AsteroidsFrame.WINDOW_SIZE.width;
-		this.location.y = (AsteroidsFrame.WINDOW_SIZE.height + this.location.y + this.velocity.y) % AsteroidsFrame.WINDOW_SIZE.height;
-		if (this.stepsUntilCollisionPossible > 0) {
-			this.stepsUntilCollisionPossible--;
+		location.x = (AsteroidsFrame.WINDOW_SIZE.width + location.x + velocity.x) % AsteroidsFrame.WINDOW_SIZE.width;
+		location.y = (AsteroidsFrame.WINDOW_SIZE.height + location.y + velocity.y) % AsteroidsFrame.WINDOW_SIZE.height;
+		if (stepsUntilCollisionPossible > 0) {
+			stepsUntilCollisionPossible--;
 		}
 	}
 
@@ -79,7 +79,7 @@ public abstract class GameObject {
 	 * Flags this object as destroyed, so that the game may deal with it.
 	 */
 	public final void destroy() {
-		this.destroyed = true;
+		destroyed = true;
 	}
 	
 	/**
@@ -94,21 +94,21 @@ public abstract class GameObject {
 	 * @return The current location of this object.
 	 */
 	public Point.Double getLocation() {
-		return this.location;
+		return location;
 	}
 
 	/**
 	 * @return The current velocity of this object.
 	 */
 	public Point.Double getVelocity() {
-		return this.velocity;
+		return velocity;
 	}
 
 	/**
 	 * @return The speed of the object, as a scalar value combining the x- and y-velocities.
 	 */
 	public double getSpeed() {
-		return this.getVelocity().distance(0, 0); // A cheap trick: distance() is doing Math.sqrt(px * px + py * py) internally.
+		return getVelocity().distance(0, 0); // A cheap trick: distance() is doing Math.sqrt(px * px + py * py) internally.
 	}
 
 	/**
@@ -116,7 +116,7 @@ public abstract class GameObject {
 	 */
 	public final boolean isDestroyed()
 	{
-		return this.destroyed;
+		return destroyed;
 	}
 
 	/**
@@ -128,15 +128,15 @@ public abstract class GameObject {
 	 * @return True if object collides with given object, false otherwise.
 	 */
 	public boolean collides(GameObject other) {
-		return this.getLocation().distance(other.getLocation()) < this.getRadius() + other.getRadius()
-				&& this.canCollide() && other.canCollide();
+		return getLocation().distance(other.getLocation()) < getRadius() + other.getRadius()
+				&& canCollide() && other.canCollide();
 	}
 
 	/**
 	 * @return Whether or not this object is immune from collisions.
 	 */
 	private boolean canCollide() {
-		return this.stepsUntilCollisionPossible <= 0;
+		return stepsUntilCollisionPossible <= 0;
 	}
 
 	/**

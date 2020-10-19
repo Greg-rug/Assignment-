@@ -32,7 +32,7 @@ public abstract class GameObjectViewModel<T extends GameObject> {
 	 * @return The game object that should be displayed.
 	 */
 	T getGameObject() {
-		return this.gameObject;
+		return gameObject;
 	}
 
 	/**
@@ -63,11 +63,11 @@ public abstract class GameObjectViewModel<T extends GameObject> {
 		// What percent of a full game tick has elapsed? Only this percent of the object's velocity will be added.
 		double gameTickRatio = timeSinceLastTick / GameUpdater.MILLISECONDS_PER_TICK;
 		Point.Double simulatedLocation = new Point.Double(
-				this.gameObject.getLocation().getX() + this.gameObject.getVelocity().getX() * gameTickRatio,
-				this.gameObject.getLocation().getY() + this.gameObject.getVelocity().getY() * gameTickRatio
+				gameObject.getLocation().getX() + gameObject.getVelocity().getX() * gameTickRatio,
+				gameObject.getLocation().getY() + gameObject.getVelocity().getY() * gameTickRatio
 		);
 
-		this.draw(graphics2D, simulatedLocation);
+		draw(graphics2D, simulatedLocation);
 	}
 
 	/**

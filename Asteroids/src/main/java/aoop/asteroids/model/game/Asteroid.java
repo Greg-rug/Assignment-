@@ -43,10 +43,10 @@ public class Asteroid extends GameObject {
 	 */
 	public Collection<Asteroid> getSuccessors() {
 		Collection<Asteroid> successors = new ArrayList<>(2); // Initialize the array to a fixed capacity to improve performance.
-		AsteroidSize successorSize = this.size.getSuccessorSize();
+		AsteroidSize successorSize = size.getSuccessorSize();
 		if (successorSize != null) {
-			successors.add(this.generateSuccessor());
-			successors.add(this.generateSuccessor());
+			successors.add(generateSuccessor());
+			successors.add(generateSuccessor());
 		}
 
 		return successors;
@@ -61,17 +61,17 @@ public class Asteroid extends GameObject {
 	 * @return A newly created asteroid, if the size of this asteroid allows for successors. Otherwise null.
 	 */
 	private Asteroid generateSuccessor() {
-		if (this.size.getSuccessorSize() == null) {
+		if (size.getSuccessorSize() == null) {
 			return null;
 		}
 		ThreadLocalRandom rng = ThreadLocalRandom.current();
 		return new Asteroid(
-				this.getLocation(),
+				getLocation(),
 				new Point.Double(
-						this.getVelocity().getX() + rng.nextDouble(-SUCCESSOR_VELOCITY_DIFFERENCE, SUCCESSOR_VELOCITY_DIFFERENCE),
-						this.getVelocity().getY() + rng.nextDouble(-SUCCESSOR_VELOCITY_DIFFERENCE, SUCCESSOR_VELOCITY_DIFFERENCE)
+						getVelocity().getX() + rng.nextDouble(-SUCCESSOR_VELOCITY_DIFFERENCE, SUCCESSOR_VELOCITY_DIFFERENCE),
+						getVelocity().getY() + rng.nextDouble(-SUCCESSOR_VELOCITY_DIFFERENCE, SUCCESSOR_VELOCITY_DIFFERENCE)
 				),
-				this.size.getSuccessorSize()
+				size.getSuccessorSize()
 		);
 	}
 

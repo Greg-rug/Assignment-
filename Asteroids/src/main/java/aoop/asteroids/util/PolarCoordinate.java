@@ -15,7 +15,7 @@ public class PolarCoordinate {
 	/**
 	 * The radius of this polar coordinate.
 	 */
-	private double radius;
+	private final double radius;
 
 	/**
 	 * Constructs a new polar coordinate with the given values.
@@ -26,11 +26,11 @@ public class PolarCoordinate {
 	 * @param radius The radius of this coordinate.
 	 */
 	public PolarCoordinate(double angle, double radius) {
-		this.angle = this.normalizeAngle(angle);
+		this.angle = normalizeAngle(angle);
 		// To normalize the radius, that is done here, since it might modify the angle, if a negative radius was given.
 		if (radius < 0) { // If the radius is negative, make it positive and flip the angle (and normalize again).
 			radius *= -1;
-			this.angle = this.normalizeAngle(this.angle + PI);
+			this.angle = normalizeAngle(this.angle + PI);
 		}
 		this.radius = radius;
 	}
@@ -55,13 +55,13 @@ public class PolarCoordinate {
 	 * @return The angle of this polar coordinate, in radians.
 	 */
 	public double getAngle() {
-		return this.angle;
+		return angle;
 	}
 
 	/**
 	 * @return The radius of this polar coordinate.
 	 */
 	public double getRadius() {
-		return this.radius;
+		return radius;
 	}
 }

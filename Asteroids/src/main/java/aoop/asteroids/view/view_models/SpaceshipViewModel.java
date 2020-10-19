@@ -29,10 +29,10 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 	 */
 	@Override
 	public void draw(Graphics2D graphics2D, Point.Double location) {
-		Spaceship spaceship = this.getGameObject();
-		this.drawMainBody(spaceship, graphics2D, location);
+		Spaceship spaceship = getGameObject();
+		drawMainBody(spaceship, graphics2D, location);
 		if (spaceship.isAccelerating()) {
-			this.drawExhaust(spaceship, graphics2D, location);
+			drawExhaust(spaceship, graphics2D, location);
 		}
 	}
 
@@ -45,7 +45,7 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 	 * @param location The location at which to draw the spaceship.
 	 */
 	private void drawMainBody(Spaceship spaceship, Graphics2D graphics2D, Point.Double location) {
-		Path2D.Double spaceshipMainBody = this.buildTriangle(
+		Path2D.Double spaceshipMainBody = buildTriangle(
 				location,
 				spaceship.getDirection(),
 				new PolarCoordinate(0.0 * PI, 20),
@@ -67,7 +67,7 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 	 * @param location The location at which to draw the spaceship.
 	 */
 	private void drawExhaust(Spaceship spaceship, Graphics2D graphics2D, Point.Double location) {
-		Path2D.Double exhaustFlame = this.buildTriangle(
+		Path2D.Double exhaustFlame = buildTriangle(
 				location,
 				spaceship.getDirection(),
 				new PolarCoordinate(1.0 * PI, 25),

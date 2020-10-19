@@ -203,7 +203,6 @@ public class Spaceship extends GameObject {
 	 */
 	private void attemptToAccelerate() {
 		if (accelerateKeyPressed && energy >= ACCELERATION_ENERGY_COST && getSpeed() < MAXIMUM_SPEED) {
-			System.out.println("accelerating");
 			getVelocity().x += Math.sin(direction) * ACCELERATION_PER_TICK;
 			getVelocity().y -= Math.cos(direction) * ACCELERATION_PER_TICK; // Note that we subtract here, because the y-axis on the screen is flipped, compared to normal math.
 			energy -= ACCELERATION_ENERGY_COST;

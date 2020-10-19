@@ -44,7 +44,6 @@ public class Asteroids {
 
 		// Create the game model and display frame.
 		Game game = new Game();
-		game.initializeGameData();
 		AsteroidsFrame frame = new AsteroidsFrame(game);
 
 		// Generate a new action event so that we can use the NewGameAction to start a new game.

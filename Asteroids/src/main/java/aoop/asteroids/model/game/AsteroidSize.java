@@ -26,7 +26,7 @@ public enum AsteroidSize {
 	 * @return The radius of this asteroid size.
 	 */
 	public double getRadius() {
-		return this.radius;
+		return radius;
 	}
 
 	/**
@@ -34,9 +34,9 @@ public enum AsteroidSize {
 	 * too small to produce successors.
 	 */
 	public AsteroidSize getSuccessorSize() {
-		if (this.equals(LARGE)) {
+		if (equals(LARGE)) {
 			return MEDIUM;
-		} else if (this.equals(MEDIUM)) {
+		} else if (equals(MEDIUM)) {
 			return SMALL;
 		} else {
 			return null;

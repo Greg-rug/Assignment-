@@ -34,7 +34,7 @@ public class GameUpdater implements Runnable {
     /**
      * The default maximum number of asteroids that may be present in the game when starting.
      */
-    private static final int ASTEROIDS_LIMIT_DEFAULT = 7;
+    private static final int ASTEROIDS_LIMIT_DEFAULT = 10;
 
     /**
      * Set this to true to allow asteroids to collide with each other, potentially causing chain reactions of asteroid
@@ -136,7 +136,7 @@ public class GameUpdater implements Runnable {
         removeDestroyedObjects();
 
         // Every 200 game ticks, try and spawn a new asteroid.
-        if (updateCounter % 200 == 0 && asteroids.size() < this.asteroidsLimit) {
+        if (updateCounter % 200 == 0 && asteroids.size() < asteroidsLimit) {
             addRandomAsteroid();
         }
         updateCounter++;

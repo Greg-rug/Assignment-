@@ -32,7 +32,7 @@ public class PlayerKeyListener implements KeyListener {
 	/**
 	 * The spaceship that will respond to key events caught by this listener.
 	 */
-	private Spaceship ship;
+	private final Spaceship ship;
 
 	/**
 	 * Constructs a new player key listener to control the given ship.

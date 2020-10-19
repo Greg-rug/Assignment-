@@ -26,7 +26,7 @@ public class AsteroidViewModel extends GameObjectViewModel<Asteroid> {
 	 */
 	@Override
 	public void draw(Graphics2D graphics2D, Point.Double location) {
-		double radius = this.getGameObject().getRadius();
+		double radius = getGameObject().getRadius();
 		graphics2D.setColor(Color.GRAY);
 		Ellipse2D.Double asteroidEllipse = new Ellipse2D.Double(
 				location.getX() - radius,
