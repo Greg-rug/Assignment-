@@ -13,6 +13,7 @@ public class Score {
     public Score(){
     }
 
+
     public int getId() {
         return id;
     }
