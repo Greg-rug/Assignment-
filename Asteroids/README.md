@@ -3,7 +3,7 @@
   <h1 align="center">Asteroids</h1>
 
   <p align="center">
-    The retro game is back with a brank new look!
+    The retro game is back with a brand new ... main menu!
   </p>
 </p>
 
@@ -84,12 +84,12 @@ The observer pattern utilized for the game can be found in the game_observer pac
 In this package there are the classes are some utility classes: Pair groups 2 different generic objects into a pair and PolarCoordinate enables view to draw spaceship in the proper direction.
 
 ## Evaluation
-<!-- Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently? -->
-We have not been able to implement a persistent highscore database due to technical issues with utilizing an MySQL server which seemingly does not allow for remote connection of other users to the database despite any attempts of granting server privileges.
+The biggest strength of our project is main menu and menu bar. The code is clear, the view looks very pretty and its functionality works really good as well. On the other hand, we have not been able to implement several thing in a way we would like. Persistent highscore database is not integrated into the model due to technical issues with utilizing an MySQL server which seemingly does not allow for remote connection of other users to the database despite any attempts of granting server privileges, however, the classes for the database are still included in the package database. 
+If we were to start agian, we would deal with multiple spaceships in a different way. In our current implementation there is an ArrayList of all spaceships including the clients' and hosts. Initially this implementation seemed great, because of less code-consuming collision detection and drawing. However, later on when implementing multiplayer features it caused a lot of trouble of properly identifiyng which ship is client's and which one is hosts. Due to these problems, multiplayer features don't have expected results. If we had more time, we would add another command pattern for signals, that are defined in the Client class, so we could avoid many consequent if statements in the Server class.
 
 ## Teamwork
 It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java, as such Lubor would work on upgrading the given code for the assingment in order to implement the required multiplayer aspects, meanwhile Tudor would attempt to create a persistent high score database. Tudor established a connection to an MySQL server in order to store the names of players and how many points they would obtain in a game. From there he implemented several methods that would allow the creation and maniputation of a data table where the varibles are stored. The methods Tudor implemented allowed for updating specific rows based upon a provided identifier, selecting all the elements in the table to print or selecting all the items ordered in a descending manner based upon the points column and allowing the creation of a table High Scores if one does not already exist in the database.
 Lubor implemented main menu both in terms of controller and view that allow the user to select the type of the action. Lubor modified the model itslef in order to allow the presence of multiple players in a game as well as he implemented the online functionality to allow the project to run either a singleplayer or multiplayer session. 
 
 ## Extras
-We implemented main menu in such way, that the game runs at the background (without the spaceship). It look really fancy!
+The main menu looks really fancy!
