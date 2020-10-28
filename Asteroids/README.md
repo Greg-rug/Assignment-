@@ -65,7 +65,7 @@ The JAR file will appear in the `/target` directory.
 Describe your program's structure (classes and packages) in detail, addressing all but the most trivial features, and provide ample reasoning for why you chose a certain structure, or why you implemented something a certain way. What design patterns did you use? Describe how and where they've been applied. And finally, how does your game handle networking? Give a description of the protocol or messages that the clients use to communicate with servers. Including a diagram here can help! 
 <!-- Write this section yourself -->
 Expected length: as much as you need to explain the above. This will likely be the longest section (it is also the most important one).
-<!-- The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything pertaining to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. In order to implement the   -->
+<!-- The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything pertaining to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. The project also employs an Observer pattern so that when a game changes state, all registered observers are notified and updated automatically -->
 A good way to split this section would be by packages (e.g. model/view/controller). Then discuss the (functionality of) relevant components in each package and how they interact with each other. Make sure to treat every package/module.
 
 ### View
@@ -76,6 +76,9 @@ A good way to split this section would be by packages (e.g. model/view/controlle
 <!---->
 ### Database 
 <!---->
+### Util 
+<!---->
+
 ## Evaluation
 
 Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?
@@ -86,7 +89,7 @@ Expected length: ~300-500 words
 
 What did each team member contribute to the assignment? Not just in terms of code, but also more abstractly, such as, "Tom upgraded the game model to support multiple ships.", or "Jerry designed the protocol that clients use for communicating with the server."
 <!-- Write this section yourself -->
-<!-- It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java , as such Lubor would work on uprgading the given code for the assingment in order to implement the required multiplayer aspect, meanwhile Tudor would attempt to create a persistent high score database.  -->
+<!-- It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java , as such Lubor would work on upgrading the given code for the assingment in order to implement the required multiplayer aspect, meanwhile Tudor would attempt to create a persistent high score database. Tudor established a connection to an MySQL server in order to store the names of players and how many points they would obtain in a game . From there he implemented several methods that would allow the creation and maniputation of a data table where the varibles are stored . The methods Tudor implemented allowed for updating specific rows based upon a provided identifier , selecting all the elements int the tabler to print or selecting all the items ordered in a descending manner based upon the points column and allowing the creation of a table High Score if one does not already exist in the database . Lubor would work on the view in order to allow the presence of multiple players in a game session as well as implementing the neccessary models to allow the project to run either a singleplayer or multiplayer session . Afterwards Lubor implemented a menu system that would allow for selecting which type a game a person might to participate in , hosting a multiplayer session or either spectating a game without participating in it or seeing the highscore table .-->
 Expected length: ~150 words.
 
 ## Extras
