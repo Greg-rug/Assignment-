@@ -1,5 +1,7 @@
 package aoop.asteroids.model.game;
 
+import aoop.asteroids.util.ByteUtil;
+
 /**
  *	The bullet is the ultimate weapon of the player. It has the same mechanics 
  *	as an asteroid, in which it cannot divert from its trajectory. However, the 
@@ -7,6 +9,7 @@ package aoop.asteroids.model.game;
  *	steps.
  */
 public class Bullet extends GameObject {
+
 	/**
 	 * The number of steps, or game ticks, that a bullet stays alive for, before it is destroyed.
 	 */
@@ -40,8 +43,13 @@ public class Bullet extends GameObject {
      * @param velocityY Velocity of the bullet as projected on the Y-axis.
      * @param stepsLeft Amount of steps the bullet is allowed to live.
      */
-	private Bullet (double locationX, double locationY, double velocityX, double velocityY, int stepsLeft) {
+	public Bullet (double locationX, double locationY, double velocityX, double velocityY, int stepsLeft) {
 		super(locationX, locationY, velocityX, velocityY, 0);
+		this.stepsLeft = stepsLeft;
+	}
+
+	public Bullet (double locationX, double locationY, double velocityX, double velocityY, double radius, int steps, int stepsLeft) {
+		super(locationX, locationY, velocityX, velocityY, radius, steps);
 		this.stepsLeft = stepsLeft;
 	}
 
@@ -53,7 +61,6 @@ public class Bullet extends GameObject {
 	@Override
 	public void nextStep () {
 		super.nextStep();
-
 		stepsLeft--;
 		if (stepsLeft <= 0) {
 			destroy();
@@ -66,5 +73,9 @@ public class Bullet extends GameObject {
 	@Override
 	protected int getDefaultStepsUntilCollisionPossible() {
 		return 3;
+	}
+
+	public int getStepsLeft() {
+		return stepsLeft;
 	}
 }

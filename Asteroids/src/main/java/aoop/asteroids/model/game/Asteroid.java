@@ -1,6 +1,8 @@
 package aoop.asteroids.model.game;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
@@ -11,6 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * when that one is destroyed.
  */
 public class Asteroid extends GameObject {
+
 	/**
 	 * By how much (both positive and negative) can the successor asteroids that spawn when an asteroid is destroyed
 	 * vary in velocity compared to their parent.
@@ -20,7 +23,7 @@ public class Asteroid extends GameObject {
 	/**
 	 * The size of this asteroid.
 	 */
-	private AsteroidSize size;
+	private final AsteroidSize size;
 
     /**
      * Constructs a new asteroid at the specified location, with specified velocities in both X and Y direction and the
@@ -33,6 +36,22 @@ public class Asteroid extends GameObject {
 	public Asteroid(Point.Double location, Point.Double velocity, AsteroidSize size) {
 		super(location, velocity, (int) size.getRadius());
 		this.size = size;
+	}
+
+	public Asteroid(double locationX, double locationY, double velocityX, double velocityY, double radius, int steps) {
+		super(locationX, locationY, velocityX, velocityY, radius, steps);
+		int r = (int) radius;
+		switch (r) {
+			case 40: {
+				size = AsteroidSize.LARGE;
+				break;
+			}
+			case 20: {
+				size = AsteroidSize.MEDIUM;
+				break;
+			}
+			default: size = AsteroidSize.SMALL;
+		}
 	}
 
 	/**

@@ -3,6 +3,7 @@ package aoop.asteroids.view;
 import aoop.asteroids.control.menu.MenuCommandHandler;
 import aoop.asteroids.control.menu.MenuItem;
 import aoop.asteroids.game_observer.GameUpdateListener;
+import aoop.asteroids.model.GameServer;
 import aoop.asteroids.model.game.Game;
 import aoop.asteroids.view.view_models.AsteroidViewModel;
 import aoop.asteroids.view.view_models.BulletViewModel;
@@ -49,11 +50,11 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 	 *
 	 * @param game The model which will be drawn in this panel.
 	 */
-	AsteroidsPanel(Game game) {
+	AsteroidsPanel(GameServer gs) {
 		initialiseMenuItems();
-		commandHandler = new MenuCommandHandler(game);
-		this.game = game;
-		this.game.addListener(this);
+		commandHandler = new MenuCommandHandler(gs);
+		game = gs.getGame();
+		game.addListener(this);
 	}
 	
 	/**

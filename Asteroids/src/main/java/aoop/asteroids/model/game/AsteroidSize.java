@@ -11,7 +11,7 @@ public enum AsteroidSize {
 	/**
 	 * The radius that each different asteroid size is.
 	 */
-	private double radius;
+	private final double radius;
 
 	/**
 	 * Constructor that requires that any new enumeration values provide a valid radius.

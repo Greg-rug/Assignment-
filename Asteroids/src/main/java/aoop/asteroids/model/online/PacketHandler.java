@@ -1,18 +1,24 @@
 package aoop.asteroids.model.online;
 
-import java.io.IOException;
+import aoop.asteroids.game_observer.GameUpdateListener;
+import aoop.asteroids.model.game.Game;
+import aoop.asteroids.util.ByteUtil;
+
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public abstract class PacketHandler implements Runnable {
+public abstract class PacketHandler {
+
+    public static final int MAX_SIZE = 2048;
 
     private static final int MAX_CONNECTIONS = 20;
-    private static final int MAX_SIZE = 120;
-    protected ExecutorService executorService;
+
+    protected final ExecutorService executorService;
+
     protected boolean running;
 
     public PacketHandler() {
@@ -20,15 +26,24 @@ public abstract class PacketHandler implements Runnable {
         executorService = Executors.newFixedThreadPool(MAX_CONNECTIONS);
     }
 
-    public byte[] getByteData(int value) {
-        ByteBuffer b = ByteBuffer.allocate(4);
-        b.putInt(value);
-        return b.array();
+    public void send(DatagramSocket ds, int signal, Game game, InetAddress ip, int port) {
+        ByteUtil bytes = new ByteUtil();
+        bytes.add(signal);
+        bytes.add(game);
+        byte[] data = bytes.getByteArray();
+        try {
+            System.out.println("Sent length = " + data.length);
+            ds.send(new DatagramPacket(data, data.length, ip, port));
+        } catch (IOException e) {
+            System.out.println("Something went wrong");
+        }
     }
 
-    public void send(DatagramSocket ds, int value, InetAddress ip, int port) {
-        byte[] data = getByteData(value);
-
+    public void send(DatagramSocket ds, int signal, int value, InetAddress ip, int port) {
+        ByteUtil bytes = new ByteUtil();
+        bytes.add(signal);
+        bytes.add(value);
+        byte[] data = bytes.getByteArray();
         try {
             ds.send(new DatagramPacket(data, data.length, ip, port));
         } catch (IOException e) {
@@ -38,21 +53,27 @@ public abstract class PacketHandler implements Runnable {
 
     public DatagramPacket receive(DatagramSocket ds) {
         byte[] data = new byte[MAX_SIZE];
-        DatagramPacket packet = new DatagramPacket(data, data.length);
-
+        DatagramPacket receivePacket = new DatagramPacket(data, data.length);
         try {
-            ds.receive(packet);
-            return packet;
+            ds.receive(receivePacket);
+            return receivePacket;
         } catch (IOException e) {
             System.out.println("Something went wrong");
         }
         return null;
     }
 
-    public int receiveInt(DatagramSocket ds) {
+    public byte[] receiveGame(DatagramSocket ds) {
         DatagramPacket dp = receive(ds);
         assert dp != null;
-        ByteBuffer wrapped = ByteBuffer.wrap(dp.getData());
-        return wrapped.getInt();
+        return dp.getData();
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

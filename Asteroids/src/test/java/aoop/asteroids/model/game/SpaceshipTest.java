@@ -27,8 +27,8 @@ class SpaceshipTest {
 		assertEquals(0, ship.getScore());
 		assertEquals(100.0, ship.getEnergyPercentage());
 		assertFalse(ship.isAccelerating());
-		assertEquals(AsteroidsFrame.WINDOW_SIZE.width / 2, ship.getLocation().getX());
-		assertEquals(AsteroidsFrame.WINDOW_SIZE.height / 2, ship.getLocation().getY());
+		assertEquals(AsteroidsFrame.WINDOW_SIZE.width / 2.0, ship.getLocation().getX());
+		assertEquals(AsteroidsFrame.WINDOW_SIZE.height / 2.0, ship.getLocation().getY());
 	}
 
 	/**

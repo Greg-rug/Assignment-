@@ -1,12 +1,16 @@
 package aoop.asteroids.model.game;
 
+import aoop.asteroids.util.ByteUtil;
 import aoop.asteroids.view.AsteroidsFrame;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * This class represents a player's ship. Like all other game objects, it has a location and velocity, but additionally,
  * the spaceship has a weapon that can be used to shoot bullets to destroy asteroids. The spaceship also slows down over
  * time. You may think this is unrealistic, but imagine for a moment that this spaceship has reaction control thrusters
- * allowing it all 6 degrees of freedom, and that it has an inertial dampening system, like any modern starfighter
+ * allowing it all 6 degrees of freedom, and that it has an inertial dampening system, like any modern star-fighter
  * would.
  *
  * Furthermore, the spaceship has a limited energy supply which is regenerated slowly over time by onboard solar panels.
@@ -14,6 +18,7 @@ import aoop.asteroids.view.AsteroidsFrame;
  * to perform some action, the spaceship will simply remain idle until it has recharged its batteries.
  */
 public class Spaceship extends GameObject {
+
 	/**
 	 * The maximum speed that the spaceship is allowed to reach before extra acceleration will not do anything.
 	 */
@@ -64,6 +69,12 @@ public class Spaceship extends GameObject {
 	 */
 	public static final double ENERGY_GENERATION = 3.0;
 
+	private static final int RADIUS = 15;
+
+	private static int counterID = 0;
+
+	private int ID;
+
 	/** Direction the spaceship is pointed in. */
 	private double direction;
 
@@ -96,20 +107,39 @@ public class Spaceship extends GameObject {
 	 * Constructs a new spaceship with default values. It starts in the middle of the window, facing directly upwards,
 	 * with no velocity.
 	 */
-	Spaceship() {
-		super(AsteroidsFrame.WINDOW_SIZE.width / 2,AsteroidsFrame.WINDOW_SIZE.height / 2, 0, 0, 15);
+	public Spaceship() {
+		super(AsteroidsFrame.WINDOW_SIZE.width / 2.0,AsteroidsFrame.WINDOW_SIZE.height / 2.0,
+				0, 0, RADIUS);
+		ID = counterID;
+		counterID++;
 		reset();
+	}
+
+	public Spaceship(Point.Double location) {
+		super(location.x, location.y, 0, 0, RADIUS);
+	}
+
+	public Spaceship(double locationX, double locationY, double velocityX, double velocityY, double radius,
+					 int steps, int ID, double direction) {
+		super(locationX, locationY, velocityX, velocityY, radius, steps);
+		this.ID = ID;
+		this.direction = direction;
+		partialReset();
 	}
 
 	/**
 	 * Resets all parameters to default values, so a new game can be started.
 	 */
 	public void reset() {
-		getLocation().x = AsteroidsFrame.WINDOW_SIZE.width / 2;
-		getLocation().y = AsteroidsFrame.WINDOW_SIZE.height / 2;
+		getLocation().x = AsteroidsFrame.WINDOW_SIZE.width / 2.0;
+		getLocation().y = AsteroidsFrame.WINDOW_SIZE.height / 2.0;
 		getVelocity().x = 0;
 		getVelocity().y = 0;
 		direction = 0;
+		partialReset();
+	}
+
+	private void partialReset() {
 		isFiring = false;
 		accelerateKeyPressed = false;
 		turnLeftKeyPressed = false;
@@ -118,42 +148,6 @@ public class Spaceship extends GameObject {
 		weaponCooldownRemaining = 0;
 		score = 0;
 		energy = ENERGY_CAPACITY;
-	}
-
-	/**
-	 *	Sets the isFiring field to the specified value.
-	 *
-	 *	@param b new value of the field.
-	 */
-	public void setIsFiring(boolean b) {
-		isFiring = b;
-	}
-
-	/**
-	 *	Sets the left field to the specified value.
-	 *
-	 *	@param b new value of the field.
-	 */
-	public void setTurnLeftKeyPressed(boolean b) {
-		turnLeftKeyPressed = b;
-	}
-
-	/**
-	 *	Sets the right field to the specified value.
-	 *
-	 *	@param b new value of the field.
-	 */
-	public void setTurnRightKeyPressed(boolean b) {
-		turnRightKeyPressed = b;
-	}
-
-	/**
-	 *	Sets the up field to the specified value.
-	 *
-	 *	@param b new value of the field.
-	 */
-	public void setAccelerateKeyPressed(boolean b) {
-		accelerateKeyPressed = b;
 	}
 
 	/**
@@ -204,7 +198,8 @@ public class Spaceship extends GameObject {
 	private void attemptToAccelerate() {
 		if (accelerateKeyPressed && energy >= ACCELERATION_ENERGY_COST && getSpeed() < MAXIMUM_SPEED) {
 			getVelocity().x += Math.sin(direction) * ACCELERATION_PER_TICK;
-			getVelocity().y -= Math.cos(direction) * ACCELERATION_PER_TICK; // Note that we subtract here, because the y-axis on the screen is flipped, compared to normal math.
+			// Note that we subtract here, because the y-axis on the screen is flipped, compared to normal math.
+			getVelocity().y -= Math.cos(direction) * ACCELERATION_PER_TICK;
 			energy -= ACCELERATION_ENERGY_COST;
 		}
 	}
@@ -229,6 +224,60 @@ public class Spaceship extends GameObject {
 				energy -= TURNING_ENERGY_COST;
 			}
 		}
+	}
+
+	/**
+	 * @return True if the spaceship may fire a bullet. A spaceship is allowed to fire if its weapon is done cooling
+	 * down, and it has enough energy, and the user is pressing the button to fire the weapon.
+	 */
+	public boolean canFireWeapon() {
+		return isFiring
+				&& weaponCooldownRemaining == 0
+				&& energy >= WEAPON_ENERGY_COST;
+	}
+
+	/**
+	 * Sets the fire tick counter to its starting value, to begin a new countdown until the weapon can be used again.
+	 */
+	public void setFired() {
+		weaponCooldownRemaining = WEAPON_COOLDOWN_TICKS;
+		energy -= WEAPON_ENERGY_COST;
+	}
+
+	/**
+	 *	Sets the isFiring field to the specified value.
+	 *
+	 *	@param b new value of the field.
+	 */
+	public void setIsFiring(boolean b) {
+		isFiring = b;
+	}
+
+	/**
+	 *	Sets the left field to the specified value.
+	 *
+	 *	@param b new value of the field.
+	 */
+	public void setTurnLeftKeyPressed(boolean b) {
+		turnLeftKeyPressed = b;
+	}
+
+	/**
+	 *	Sets the right field to the specified value.
+	 *
+	 *	@param b new value of the field.
+	 */
+	public void setTurnRightKeyPressed(boolean b) {
+		turnRightKeyPressed = b;
+	}
+
+	/**
+	 *	Sets the up field to the specified value.
+	 *
+	 *	@param b new value of the field.
+	 */
+	public void setAccelerateKeyPressed(boolean b) {
+		accelerateKeyPressed = b;
 	}
 
 	/**
@@ -261,24 +310,6 @@ public class Spaceship extends GameObject {
 	}
 
 	/**
-	 * @return True if the spaceship may fire a bullet. A spaceship is allowed to fire if its weapon is done cooling
-	 * down, and it has enough energy, and the user is pressing the button to fire the weapon.
-	 */
-	public boolean canFireWeapon() {
-		return isFiring
-				&& weaponCooldownRemaining == 0
-				&& energy >= WEAPON_ENERGY_COST;
-	}
-
-	/**
-	 * Sets the fire tick counter to its starting value, to begin a new countdown until the weapon can be used again.
-	 */
-	public void setFired() {
-		weaponCooldownRemaining = WEAPON_COOLDOWN_TICKS;
-		energy -= WEAPON_ENERGY_COST;
-	}
-
-	/**
 	 * Increments score field.
 	 */
 	public void increaseScore() {
@@ -290,5 +321,20 @@ public class Spaceship extends GameObject {
 	 */
 	public int getScore() {
 		return score;
+	}
+
+	/**
+	 * @return ID of this spaceship
+	 */
+	public int getID() {
+		return ID;
+	}
+
+	/**
+	 *	Sets ID to the specified value.
+	 *	@param ID new value of ID.
+	 */
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 }

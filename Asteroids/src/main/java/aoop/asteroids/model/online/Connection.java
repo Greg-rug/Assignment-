@@ -1,46 +1,56 @@
 package aoop.asteroids.model.online;
 
-import aoop.asteroids.game_observer.GameUpdateListener;
 import aoop.asteroids.model.game.Game;
-import aoop.asteroids.util.Pair;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-public class ThreadedConnectionHandler extends PacketHandler implements GameUpdateListener {
+public class Connection extends PacketHandler {
 
-    private final DatagramPacket datagramPacket;
-    private DatagramSocket datagramSocket;
+    public static final int MAX_NO_RESPONSE = 30;
+
+    private final DatagramPacket dp;
+    private final DatagramSocket ds;
     private final Game game;
-    private final Server server;
+    private int lastTick;
+    private final int shipID;
 
-    public ThreadedConnectionHandler(Server server, Game game, DatagramPacket datagramPacket) {
+    public Connection(Game game, DatagramSocket ds, DatagramPacket dp, int shipID) {
         super();
-        game.addListener(this);
-        this.server = server;
         this.game = game;
-        this.datagramPacket = datagramPacket;
-        try {
-            datagramSocket = new DatagramSocket();
-        } catch (IOException e) {
-            System.out.println("Connection problem");
-        }
-
+        this.dp = dp;
+        this.ds = ds;
+        this.shipID = shipID;
+        lastTick = game.getLastTick();
+        sendShipId();
     }
 
-    @Override
-    public void run() {
-        running = true;
-        receive(datagramSocket);
-        System.out.println();
+    public void sendShipId() {
+        send(ds, Client.RECEIVED_SIGNAL, shipID, dp.getAddress(), dp.getPort());
     }
 
-    @Override
-    public void onGameUpdated(long timeSinceLastTick) {
-        if (running) {
-            send(datagramSocket, game, datagramPacket.getAddress(), datagramPacket.getPort());
+    public void send() {
+        if (running && MAX_NO_RESPONSE > game.getLastTick() - lastTick) {
+            System.out.println("Sending");
+            send(ds, Client.GAME_SIGNAL, game, dp.getAddress(), dp.getPort());
         }
+        if (!running) {
+            sendShipId();
+        }
+    }
+
+    public int getLastTick() {
+        return lastTick;
+    }
+
+    public void setLastTick(int lastTick) {
+        this.lastTick = lastTick;
+    }
+
+    public InetAddress getInetAddres() {
+        return dp.getAddress();
     }
 }

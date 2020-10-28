@@ -4,6 +4,7 @@ import aoop.asteroids.control.*;
 import aoop.asteroids.control.menu.MenuItem;
 import aoop.asteroids.control.menu.MenuItemAction;
 import aoop.asteroids.control.menu.MenuMouseController;
+import aoop.asteroids.model.GameServer;
 import aoop.asteroids.model.game.Game;
 
 import javax.swing.*;
@@ -24,15 +25,15 @@ public class AsteroidsFrame extends JFrame {
 	public static final Dimension WINDOW_SIZE = new Dimension(800, 800);
 
 	/** The game model. */
-	private final Game game;
+	private final GameServer gs;
 
 	/**
 	 * Constructs the game's main window.
 	 *
 	 * @param game The game model that this window will show.
 	 */
-	public AsteroidsFrame (Game game) {
-		this.game = game;
+	public AsteroidsFrame (GameServer gs) {
+		this.gs = gs;
 		initSwingUI();
 	}
 
@@ -46,10 +47,10 @@ public class AsteroidsFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		AsteroidsPanel panel = new AsteroidsPanel(game);
+		AsteroidsPanel panel = new AsteroidsPanel(gs);
 
 		// Add a key listener that can control the game's spaceship.
-		addKeyListener(new PlayerKeyListener(game.getSpaceship()));
+		addKeyListener(new PlayerKeyListener(gs.getGame().getSpaceship()));
 
 		// Add a menu bar with some simple actions.
 		JMenuBar menuBar = new JMenuBar();

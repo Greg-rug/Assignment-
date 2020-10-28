@@ -10,15 +10,16 @@ import java.awt.*;
  * velocity.
  */
 public abstract class GameObject {
+
 	/**
 	 * An x and y value pair indicating the object's current location.
 	 */
-	private Point.Double location;
+	private final Point.Double location;
 
 	/**
 	 * An x and y value pair indicating the object's current velocity, in pixels per game tick.
 	 */
-	private Point.Double velocity;
+	private final Point.Double velocity;
 
 	/** Radius of the object. */
 	private final double radius;
@@ -44,7 +45,7 @@ public abstract class GameObject {
 	 * @param velocityY Velocity in Y direction.
 	 * @param radius Radius of the object.
 	 */
-	protected GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius) {
+	public GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius) {
 		location = new Point.Double(locationX, locationY);
 		velocity = new Point.Double(velocityX, velocityY);
 		this.radius = radius;
@@ -53,13 +54,17 @@ public abstract class GameObject {
 
 	/**
 	 * A convenience constructor that accepts points instead of individual coordinates.
-	 *
 	 * @param location A point representing the x- and y-coordinates of the object's location.
 	 * @param velocity A point representing the object's speed on both the x and y axes.
 	 * @param radius The radius of the object.
 	 */
-	protected GameObject(Point.Double location, Point.Double velocity, double radius) {
+	public GameObject(Point.Double location, Point.Double velocity, double radius) {
 		this(location.getX(), location.getY(), velocity.getX(), velocity.getY(), radius);
+	}
+
+	public GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius, int steps) {
+		this(locationX, locationY, velocityX, velocityY, radius);
+		stepsUntilCollisionPossible = steps;
 	}
 
 	/**
@@ -109,6 +114,10 @@ public abstract class GameObject {
 	 */
 	public double getSpeed() {
 		return getVelocity().distance(0, 0); // A cheap trick: distance() is doing Math.sqrt(px * px + py * py) internally.
+	}
+
+	public int getStepsUntilCollisionPossible() {
+		return stepsUntilCollisionPossible;
 	}
 
 	/**

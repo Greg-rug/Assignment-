@@ -3,7 +3,6 @@ package aoop.asteroids.control;
 import aoop.asteroids.model.game.*;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,13 +17,13 @@ public class GameUpdater implements Runnable {
      * The refresh rate of the display, in frames per second. Increasing this number makes the game look smoother, up to
      * a certain point where it's no longer noticeable.
      */
-    private static final int DISPLAY_FPS = 20;
+    private static final int DISPLAY_FPS = 30;
 
     /**
      * The rate at which the game ticks (how often physics updates are applied), in frames per second. Increasing this
      * number speeds up everything in the game. Ships react faster to input, bullets fly faster, etc.
      */
-    private static final int PHYSICS_FPS = 20;
+    private static final int PHYSICS_FPS = 15;
 
     /**
      * The number of milliseconds in a game tick.
@@ -34,7 +33,7 @@ public class GameUpdater implements Runnable {
     /**
      * The default maximum number of asteroids that may be present in the game when starting.
      */
-    private static final int ASTEROIDS_LIMIT_DEFAULT = 10;
+    private static final int ASTEROIDS_LIMIT_DEFAULT = 7;
 
     /**
      * Set this to true to allow asteroids to collide with each other, potentially causing chain reactions of asteroid
@@ -118,7 +117,7 @@ public class GameUpdater implements Runnable {
         asteroids.forEach(GameObject::nextStep);
         bullets.forEach(GameObject::nextStep);
 
-        if (!game.isAsteroidsOnly()) {
+        if (!game.isAsteroidsOnly() && !game.isSpectate()) {
             game.getSpaceships().forEach(ship -> {
                 ship.nextStep();
                 if (ship.canFireWeapon()) {
@@ -136,10 +135,11 @@ public class GameUpdater implements Runnable {
         removeDestroyedObjects();
 
         // Every 200 game ticks, try and spawn a new asteroid.
-        if (updateCounter % 200 == 0 && asteroids.size() < asteroidsLimit) {
+        if (updateCounter % 200 == 0 && asteroids.size() < asteroidsLimit && !game.isSpectate() && !game.isClient()) {
             addRandomAsteroid();
         }
         updateCounter++;
+        game.setLastTick(updateCounter);
     }
 
     /**

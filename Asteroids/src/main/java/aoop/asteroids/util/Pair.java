@@ -1,5 +1,7 @@
 package aoop.asteroids.util;
 
+import java.io.Serializable;
+
 /**
  * Class for Pair of 2 Objects
  * @param <E> type if first object
