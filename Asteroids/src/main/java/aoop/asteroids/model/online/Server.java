@@ -3,6 +3,7 @@ package aoop.asteroids.model.online;
 import aoop.asteroids.game_observer.GameUpdateListener;
 import aoop.asteroids.model.game.Game;
 import aoop.asteroids.model.game.ByteModel;
+import aoop.asteroids.model.game.Spaceship;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -53,17 +54,35 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
                 }
                 if (outcome == Client.MAINTAIN_SIGNAL) {
                     Connection c = findConnection(dp.getAddress());
+                    moveSpaceship(bytes);
                     if (c != null) {
                         c.setLastTick(game.getLastLocalTick());
                         c.setRunning(true);
                     }
                 }
                 if (outcome == Client.SPECTATE_SIGNAL) {
+                    if (findConnection(dp.getAddress()) == null) {
+                        connections.add(new Connection(game, ds, dp, -1));
+                    }
                     send(ds, Client.RECEIVED_SIGNAL, 0, dp.getAddress(), dp.getPort());
                 }
             }
         } catch (IOException e) {
             System.out.println("Connection problem");
+        }
+    }
+
+    /**
+     * moves the spaceship of the client
+     * @param bytes to be processed
+     */
+    private void moveSpaceship(ByteModel bytes) {
+        if (game.getSpaceships().size() > 1) {
+            Spaceship s = game.getSpaceships().get(1);
+            s.setIsFiring(bytes.getBoolean());
+            s.setAccelerateKeyPressed(bytes.getBoolean());
+            s.setTurnRightKeyPressed(bytes.getBoolean());
+            s.setTurnLeftKeyPressed(bytes.getBoolean());
         }
     }
 

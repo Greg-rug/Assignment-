@@ -13,7 +13,7 @@ import java.net.InetAddress;
  */
 public abstract class PacketHandler {
 
-    public static final int MAX_SIZE = 2048;
+    public static final int MAX_SIZE = 1024;
 
     protected boolean running;
 

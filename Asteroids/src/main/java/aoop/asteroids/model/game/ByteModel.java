@@ -166,14 +166,6 @@ public class ByteModel {
     }
 
     /**
-     * returns true if its possible to read given size of bytes
-     * @param size of read
-     */
-    private boolean possibleToRead(int size) {
-        return write >= read + size;
-    }
-
-    /**
      * @return boolean at the current read pointer
      */
     public boolean getBoolean() {

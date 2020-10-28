@@ -1,4 +1,4 @@
-package aoop.asteroids.database;
+package aoop.asteroids.util;
 
 import aoop.asteroids.model.game.Score;
 
@@ -6,17 +6,38 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreDB implements ScoreDao {
+/**
+ * Score database
+ */
+public class ScoreDB {
+
+    private static final String URL = "jdbc:mysql://localhost:3306/ScoreDB";
+    private static final String USER = "root";
+    private static final String PASSWORD = "PassW0rd";
+
+    /**
+     * Connect to the database
+     * @return connection of the database
+     */
+    public Connection getConnection() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("Cannot connect to the database");
+        }
+        return connection;
+    }
 
     /**
      * creates a table for scores in the database
      */
-    @Override
     public void createHighScoreTable() {
         Connection connection = null;
         Statement statement = null;
         try{
-            connection = ConnectionConfiguration.getConnection();
+            connection = getConnection();
             statement = connection.createStatement();
             statement.execute(" CREATE TABLE IF NOT EXISTS ScoreDB .  HighScore " +
                     "( id int primary key unique auto_increment,"
@@ -33,12 +54,11 @@ public class ScoreDB implements ScoreDao {
      * insert score to the database
      * @param score to be inserted
      */
-    @Override
     public void insert(Score score) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            connection = ConnectionConfiguration.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement("INSERT INTO HighScore (name,points)" +
                     "VALUES (?, ?)");
             preparedStatement.setString(1, score.getName());
@@ -53,17 +73,15 @@ public class ScoreDB implements ScoreDao {
     }
 
     /**
-     * selects all scores by descending order
-     * @return
+     * @return list of all scores by descending order
      */
-    @Override
     public List<Score> selectAllDesc() {
         List<Score> scores = new ArrayList<>();
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionConfiguration.getConnection();
+            connection = getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM HighScore ORDER BY points DESC");
             while (resultSet.next()) {
@@ -88,12 +106,11 @@ public class ScoreDB implements ScoreDao {
      * @param score to update
      * @param id of updated score
      */
-    @Override
     public void update(Score score, int id) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
-            connection = ConnectionConfiguration.getConnection();
+            connection = getConnection();
             preparedStatement = connection.prepareStatement("UPDATE HighScore SET " +
                     "name=?, points = ? WHERE id = ?");
             preparedStatement.setString(1,score.getName());

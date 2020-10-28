@@ -14,7 +14,7 @@ public abstract class GameObject {
 	/**
 	 * An x and y value pair indicating the object's current location.
 	 */
-	private final Point.Double location;
+	private Point.Double location;
 
 	/**
 	 * An x and y value pair indicating the object's current velocity, in pixels per game tick.
@@ -108,6 +108,14 @@ public abstract class GameObject {
 	 */
 	public Point.Double getLocation() {
 		return location;
+	}
+
+	/**
+	 * setter for location
+	 * @param location to be set
+	 */
+	public void setLocation(Point.Double location) {
+		this.location = location;
 	}
 
 	/**

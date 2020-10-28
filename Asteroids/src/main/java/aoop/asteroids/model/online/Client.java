@@ -54,7 +54,7 @@ public class Client extends PacketHandler implements Runnable {
             response = bytes.getInt();
             if (response < 0) return false;
         } while (response != RECEIVED_SIGNAL);
-        game.getSpaceship().setID(bytes.getInt());
+        if (!game.isSpectate()) game.getSpaceship().setID(bytes.getInt());
         return true;
     }
 

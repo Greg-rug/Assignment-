@@ -13,17 +13,21 @@ public class GameServer {
 
     private final Game game;
 
-    private Thread server;
+    private Thread threadServer;
 
-    private Thread client;
+    private Thread threadClient;
+
+    private Server server;
+
+    private Client client;
 
     /**
      * Constructor
      */
     public GameServer() {
         game = new Game();
-        server = new Thread(new Server(game));
-        client = new Thread(new Client(game));
+        server = new Server(game);
+        client = new Client(game);
         highScores = false;
     }
 
@@ -38,6 +42,40 @@ public class GameServer {
     }
 
     /**
+     * start server
+     */
+    public void startServer() {
+        server = new Server(game);
+        threadServer = new Thread(server);
+        threadServer.start();
+    }
+
+    /**
+     * starts client
+     */
+    public void startClient() {
+        client = new Client(game);
+        threadClient = new Thread(client);
+        threadClient.start();
+    }
+
+    /**
+     * quits server
+     */
+    public void quitServer() {
+        server.setRunning(false);
+        threadServer = new Thread(new Server(game));
+    }
+
+    /**
+     * quits client
+     */
+    public void quitClient() {
+        client.setRunning(false);
+        threadClient = new Thread(new Client(game));
+    }
+
+    /**
      * @return game
      */
     public Game getGame() {
@@ -45,44 +83,14 @@ public class GameServer {
     }
 
     /**
-     * start server
-     */
-    public void startServer() {
-        server.start();
-    }
-
-    /**
-     * starts client
-     */
-    public void startClient() {
-        client.start();
-    }
-
-    /**
-     * quits server
-     */
-    public void quitServer() {
-        server.interrupt();
-        server = new Thread(new Server(game));
-    }
-
-    /**
-     * quits client
-     */
-    public void quitClient() {
-        client.interrupt();
-        client = new Thread(new Client(game));
-    }
-
-    /**
-     * @return highscores flag value
+     * @return high-scores flag value
      */
     public boolean isHighScores() {
         return highScores;
     }
 
     /**
-     * setter for highscores flag
+     * setter for high-scores flag
      * @param highScores value to be set
      */
     public void setHighScores(boolean highScores) {

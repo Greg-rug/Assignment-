@@ -88,6 +88,7 @@ public class Game extends ObservableGame {
 	 */
 	public void initializeGameData() {
 		Spaceship spaceship;
+		//saving spaceship not to lose player key listener
 		if (spaceships != null && spaceships.size() > 0) {
 			spaceship = spaceships.get(0);
 			spaceship.reset();
