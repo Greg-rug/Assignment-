@@ -26,7 +26,7 @@
 
 ## About The Project
 
-This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding to it a multiplayer aspect to it besides it's regular single-player features.
+This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding a multiplayer aspect to it besides it's regular single-player features.
 
 ### Built With
 
