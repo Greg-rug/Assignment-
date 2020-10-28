@@ -15,8 +15,11 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [Design Description](#design-description)
-  * [ExamplePackageA](#examplepackagea)
-  * [ExamplePackageB](#examplepackageb)
+  * [View](#view)
+  * [Model](#model)
+  * [Controller](#controller)
+  * [Game_Observer](#game_observer)
+  * [Util](#util)
 * [Evaluation](#evaluation)
 * [Teamwork](#teamwork)
 * [Extras](#extras)
@@ -28,6 +31,8 @@ This projects aims to recreate the classic "Asteroids" arcade game, whose object
 ### Built With
 
 * [Maven](https://maven.apache.org/)
+* [MySQL](https://www.mysql.com/)
+* [JDBC connector](https://dev.mysql.com/downloads/connector/j/)
 
 ## Getting Started
 
@@ -39,6 +44,8 @@ The latest versions of the following:
 
 * Java
 * Maven 
+* MySQL 
+* JDBC connector
 
 ### Installation
 
@@ -59,6 +66,19 @@ Should you want to run this program standalone, you can create a JAR file with t
 mvn clean package
 ```
 The JAR file will appear in the `/target` directory.
+
+If you are going to run the `main` method in `Asteroids.java` using Intellij IDE , then we recommend you do the following:
+
+1. Download the `mysql-connector-java-8.0.22.zip` file using the provided hyperlink , then unzip the file .
+2. Open up the project in Intellij and then click on the `File` button and then select `Project Structure` .
+3. A new tab will open where in `Project Settings` you will find and click on `Module` .
+4. Once you have done that , you will search for the `Dependencies` button and press it .
+5. From there look for the `+` button on the right of the `Scope` panel and click it .
+6. A small menu will appear and you shall look for the `JAR files and other directories` option .
+7. That will open another menu from where you will select the `mysql-connector-java-8.0.22.jar` option .
+
+Once you have done all of the above and exit the `Project Structure` tab , you should see the jar file in the `External libraries` folder . 
+
 
 ## Design Description
 
@@ -89,7 +109,7 @@ If we were to start agian, we would deal with multiple spaceships in a different
 
 ## Teamwork
 It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java, as such Lubor would work on upgrading the given code for the assingment in order to implement the required multiplayer aspects, meanwhile Tudor would attempt to create a persistent high score database. Tudor established a connection to an MySQL server in order to store the names of players and how many points they would obtain in a game. From there he implemented several methods that would allow the creation and maniputation of a data table where the varibles are stored. The methods Tudor implemented allowed for updating specific rows based upon a provided identifier, selecting all the elements in the table to print or selecting all the items ordered in a descending manner based upon the points column and allowing the creation of a table High Scores if one does not already exist in the database.
-Lubor implemented main menu both in terms of controller and view that allow the user to select the type of the action. Lubor modified the model itslef in order to allow the presence of multiple players in a game as well as he implemented the online functionality to allow the project to run either a singleplayer or multiplayer session. 
+Lubor implemented main menu both in terms of controller and view that allow the user to select the type of the action. Lubor modified the model itself in order to allow the presence of multiple players in a game as well as he implemented the online functionality to allow the project to run either a singleplayer or multiplayer session. 
 
 ## Extras
 The main menu looks really fancy!
