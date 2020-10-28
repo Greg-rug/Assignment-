@@ -3,7 +3,7 @@
   <h1 align="center">Asteroids</h1>
 
   <p align="center">
-    < add a very short description here (1 sentence)>
+    The retro game is back with a brank new look!
   </p>
 </p>
 
@@ -23,7 +23,7 @@
 
 ## About The Project
 
-<!-- This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding to it a multiplayer aspect to it besides it's regular single-player features. -->
+This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding to it a multiplayer aspect to it besides it's regular single-player features.
 
 ### Built With
 
@@ -64,8 +64,7 @@ The JAR file will appear in the `/target` directory.
 
 Describe your program's structure (classes and packages) in detail, addressing all but the most trivial features, and provide ample reasoning for why you chose a certain structure, or why you implemented something a certain way. What design patterns did you use? Describe how and where they've been applied. And finally, how does your game handle networking? Give a description of the protocol or messages that the clients use to communicate with servers. Including a diagram here can help! 
 <!-- Write this section yourself -->
-Expected length: as much as you need to explain the above. This will likely be the longest section (it is also the most important one).
-<!-- The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything pertaining to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. The project also employs an Observer pattern so that when a game changes state, all registered observers are notified and updated automatically . -->
+The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything pertaining to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. The project also employs an Observer pattern so that when a game changes state, all registered observers are notified and updated automatically . -->
 A good way to split this section would be by packages (e.g. model/view/controller). Then discuss the (functionality of) relevant components in each package and how they interact with each other. Make sure to treat every package/module.
 
 ### View
