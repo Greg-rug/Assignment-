@@ -2,25 +2,29 @@ package aoop.asteroids.model.online;
 
 import aoop.asteroids.game_observer.GameUpdateListener;
 import aoop.asteroids.model.game.Game;
-import aoop.asteroids.util.ByteUtil;
+import aoop.asteroids.model.game.ByteModel;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * This is a class for host server of the game
+ */
 public class Server extends PacketHandler implements GameUpdateListener, Runnable {
-
-    //TODO: secure read in byte-util
 
     public static final int PORT_NUMBER = 55554;
 
     private final Game game;
     private final ArrayList<Connection> connections;
 
+    /**
+     * Constructor - sets default values of the fields
+     * @param game being host
+     */
     public Server(Game game) {
         super();
         this.game = game;
@@ -28,6 +32,9 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
         connections = new ArrayList<>();
     }
 
+    /**
+     * server listens to connections and behaves accordignly
+     */
     @Override
     public void run() {
         try (DatagramSocket ds = new DatagramSocket(PORT_NUMBER)) {
@@ -35,7 +42,7 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
             running = true;
             while (running) {
                 DatagramPacket dp = receive(ds);
-                ByteUtil bytes = new ByteUtil(dp.getData());
+                ByteModel bytes = new ByteModel(dp.getData());
                 int outcome = bytes.getInt();
                 if (outcome == Client.JOIN_SIGNAL) {
                     if (findConnection(dp.getAddress()) == null) {
@@ -45,21 +52,26 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
                     send(ds, Client.RECEIVED_SIGNAL, shipID, dp.getAddress(), dp.getPort());
                 }
                 if (outcome == Client.MAINTAIN_SIGNAL) {
-                    System.out.println("MAINTAINING");
                     Connection c = findConnection(dp.getAddress());
                     if (c != null) {
-                        System.out.println("MAINTAIN not NULL");
-                        c.setLastTick(game.getLastTick());
+                        c.setLastTick(game.getLastLocalTick());
                         c.setRunning(true);
                     }
                 }
-                System.out.println("ended");
+                if (outcome == Client.SPECTATE_SIGNAL) {
+                    send(ds, Client.RECEIVED_SIGNAL, 0, dp.getAddress(), dp.getPort());
+                }
             }
         } catch (IOException e) {
             System.out.println("Connection problem");
         }
     }
 
+    /**
+     * looks for connection is in connections list on IP
+     * @param IP to be looked for
+     * @return connection if found
+     */
     private Connection findConnection(InetAddress IP) {
         for (Connection c: connections) {
             if (c.getInetAddres().equals(IP)) return c;
@@ -67,15 +79,19 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
         return null;
     }
 
+    /**
+     * After each update of the game sends the relevant game state to all active connections
+     * @param timeSinceLastTick The number of milliseconds that have passed since the last game tick occurred. This is
+     *                          used so that things like a display may continue showing an animated model while no
+     */
     @Override
     public void onGameUpdated(long timeSinceLastTick) {
         Iterator<Connection> iter = connections.iterator();
         while(iter.hasNext()) {
-            System.out.println("BEING SEND");
             Connection c = iter.next();
-            c.send();
-            if (game.getLastTick() - c.getLastTick() > Connection.MAX_NO_RESPONSE) {
-                System.out.println("REMOVING_______");
+            c.sendGame();
+            //removes inactive connections from the list
+            if (game.getLastLocalTick() - c.getLastTick() > Connection.MAX_NO_RESPONSE_TIME) {
                 iter.remove();
             }
         }

@@ -1,10 +1,8 @@
 package aoop.asteroids.model.game;
 
-import aoop.asteroids.util.ByteUtil;
 import aoop.asteroids.view.AsteroidsFrame;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 /**
  * This class represents a player's ship. Like all other game objects, it has a location and velocity, but additionally,
@@ -69,13 +67,24 @@ public class Spaceship extends GameObject {
 	 */
 	public static final double ENERGY_GENERATION = 3.0;
 
+	/**
+	 * radius of the spaceship
+	 */
 	private static final int RADIUS = 15;
 
+	/**
+	 * increments with each new spaceship created
+	 */
 	private static int counterID = 0;
 
+	/**
+	 * identification of the spaceship
+	 */
 	private int ID;
 
-	/** Direction the spaceship is pointed in. */
+	/**
+	 *  Direction the spaceship is pointed in.
+	 */
 	private double direction;
 
 	/**
@@ -115,10 +124,25 @@ public class Spaceship extends GameObject {
 		reset();
 	}
 
+	/**
+	 * Constructor with the given location.
+	 * @param location of the spaceship
+	 */
 	public Spaceship(Point.Double location) {
 		super(location.x, location.y, 0, 0, RADIUS);
 	}
 
+	/**
+	 * Constructor for loading
+	 * @param locationX x location of the spaceship
+	 * @param locationY y location of the spaceship
+	 * @param velocityX x velocity of the spaceship
+	 * @param velocityY y velocity of the spaceship
+	 * @param radius radius of the spaceship
+	 * @param steps steps before collision of the spaceship
+	 * @param ID of the spaceship
+	 * @param direction of the spaceship
+	 */
 	public Spaceship(double locationX, double locationY, double velocityX, double velocityY, double radius,
 					 int steps, int ID, double direction) {
 		super(locationX, locationY, velocityX, velocityY, radius, steps);
@@ -139,6 +163,9 @@ public class Spaceship extends GameObject {
 		partialReset();
 	}
 
+	/**
+	 * resets some spaceship fields to the default values
+	 */
 	private void partialReset() {
 		isFiring = false;
 		accelerateKeyPressed = false;
@@ -245,8 +272,19 @@ public class Spaceship extends GameObject {
 	}
 
 	/**
+	 * @return current inputs represented as integer
+	 */
+	public int getInputValue() {
+		ByteModel b = new ByteModel();
+		b.add(isFiring);
+		b.add(accelerateKeyPressed);
+		b.add(turnRightKeyPressed);
+		b.add(turnLeftKeyPressed);
+		return b.getInt();
+	}
+
+	/**
 	 *	Sets the isFiring field to the specified value.
-	 *
 	 *	@param b new value of the field.
 	 */
 	public void setIsFiring(boolean b) {
@@ -255,7 +293,6 @@ public class Spaceship extends GameObject {
 
 	/**
 	 *	Sets the left field to the specified value.
-	 *
 	 *	@param b new value of the field.
 	 */
 	public void setTurnLeftKeyPressed(boolean b) {
@@ -264,7 +301,6 @@ public class Spaceship extends GameObject {
 
 	/**
 	 *	Sets the right field to the specified value.
-	 *
 	 *	@param b new value of the field.
 	 */
 	public void setTurnRightKeyPressed(boolean b) {
@@ -273,7 +309,6 @@ public class Spaceship extends GameObject {
 
 	/**
 	 *	Sets the up field to the specified value.
-	 *
 	 *	@param b new value of the field.
 	 */
 	public void setAccelerateKeyPressed(boolean b) {

@@ -7,6 +7,7 @@ import static java.lang.Math.PI;
  * coordinate has an angle between 0 (inclusive) and 2 * PI (exclusive), as well as a positive radius.
  */
 public class PolarCoordinate {
+
 	/**
 	 * The angle of this polar coordinate, in radians.
 	 */
@@ -21,7 +22,6 @@ public class PolarCoordinate {
 	 * Constructs a new polar coordinate with the given values.
 	 * Normalizes angles to 0 <= angle <= 2 * PI.
 	 * Normalizes radii to 0 <= radius.
-	 *
 	 * @param angle The angle of this coordinate.
 	 * @param radius The radius of this coordinate.
 	 */
@@ -38,9 +38,7 @@ public class PolarCoordinate {
 	/**
 	 * Normalizes an angle so that it lies between 0 and 2 * PI.
 	 * I know it's probably not the fastest way to compute this, but it's easy to read.
-	 *
 	 * @param rawAngle The angle to normalize, in radians.
-	 *
 	 * @return A normalized angle in radians. 0 <= angle <= 2 * PI.
 	 */
 	private double normalizeAngle(double rawAngle) {

@@ -9,9 +9,9 @@ import java.awt.geom.Ellipse2D;
  * View model for displaying an asteroid object.
  */
 public class AsteroidViewModel extends GameObjectViewModel<Asteroid> {
+
 	/**
 	 * Constructs a new view model with the given game object.
-	 *
 	 * @param gameObject The object that will be displayed when this view model is drawn.
 	 */
 	public AsteroidViewModel(Asteroid gameObject) {
@@ -20,7 +20,6 @@ public class AsteroidViewModel extends GameObjectViewModel<Asteroid> {
 
 	/**
 	 * Draws the game object that was given to this view model.
-	 *
 	 * @param graphics2D The graphics object which provides the necessary drawing methods.
 	 * @param location The location at which to draw the object.
 	 */

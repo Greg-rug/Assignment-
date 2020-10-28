@@ -42,14 +42,9 @@ public class Asteroids {
 		if (System.getProperty("os.name").contains("Mac")) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-
-		//TODO: delete all stack traces
-
 		// Create the game model and display frame.
 		GameServer gs = new GameServer();
 		AsteroidsFrame frame = new AsteroidsFrame(gs);
-
-
 		// Generate a new action event so that we can use the NewGameAction to start a new game.
 		new MenuItemAction(new MenuCommandHandler(gs)).actionPerformed(
 				new ActionEvent(frame, ActionEvent.ACTION_PERFORMED, MenuItem.MAIN_MENU.toString()));

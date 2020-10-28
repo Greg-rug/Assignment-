@@ -1,7 +1,5 @@
 package aoop.asteroids.model.game;
 
-import aoop.asteroids.util.ByteUtil;
-
 /**
  *	The bullet is the ultimate weapon of the player. It has the same mechanics 
  *	as an asteroid, in which it cannot divert from its trajectory. However, the 
@@ -24,7 +22,6 @@ public class Bullet extends GameObject {
 	/**
 	 * Constructs a new bullet using the given location and velocity parameters, and a default number of steps until the
 	 * bullet is destroyed.
-	 *
 	 * @param locationX The location of this bullet on the x-axis.
 	 * @param locationY The location of this bullet on the y-axis.
 	 * @param velocityX velocity of the bullet as projected on the X-axis.
@@ -36,7 +33,6 @@ public class Bullet extends GameObject {
 
 	/**
      * Constructs a new bullet with a set number of steps until it is destroyed.
-	 *
      * @param locationX The location of this bullet on the x-axis.
 	 * @param locationY The location of this bullet on the y-axis.
      * @param velocityX Velocity of the bullet as projected on the X-axis.
@@ -48,7 +44,18 @@ public class Bullet extends GameObject {
 		this.stepsLeft = stepsLeft;
 	}
 
-	public Bullet (double locationX, double locationY, double velocityX, double velocityY, double radius, int steps, int stepsLeft) {
+	/**
+	 * Constructor for loading
+	 * @param locationX location x of the object
+	 * @param locationY location y of the object
+	 * @param velocityX velocity x of the object
+	 * @param velocityY velocity y of the object
+	 * @param radius radius of the object
+	 * @param steps until collision is possible
+	 * @param stepsLeft until destroyed
+	 */
+	public Bullet (double locationX, double locationY, double velocityX, double velocityY, double radius, int steps,
+				   int stepsLeft) {
 		super(locationX, locationY, velocityX, velocityY, radius, steps);
 		this.stepsLeft = stepsLeft;
 	}
@@ -75,6 +82,9 @@ public class Bullet extends GameObject {
 		return 3;
 	}
 
+	/**
+	 * @return stepsLeft
+	 */
 	public int getStepsLeft() {
 		return stepsLeft;
 	}

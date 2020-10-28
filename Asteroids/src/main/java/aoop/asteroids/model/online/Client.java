@@ -1,24 +1,30 @@
 package aoop.asteroids.model.online;
 
 import aoop.asteroids.model.game.Game;
-import aoop.asteroids.util.ByteUtil;
+import aoop.asteroids.model.game.ByteModel;
 
 import java.io.IOException;
 import java.net.*;
 
+/**
+ * This is a class of a client that connect to the server
+ */
 public class Client extends PacketHandler implements Runnable {
 
     public static final int JOIN_SIGNAL = 1;
     public static final int MAINTAIN_SIGNAL = 2;
     public static final int RECEIVED_SIGNAL = 3;
     public static final int GAME_SIGNAL = 4;
+    public static final int SPECTATE_SIGNAL = 5;
 
     private DatagramSocket datagramSocket;
     private final Game game;
     private InetAddress IP;
 
-    //TODO: first int is supposed to be ship ID!!!
-
+    /**
+     * Constructor
+     * @param game of the client
+     */
     public Client(Game game) {
         super();
         this.game = game;
@@ -26,24 +32,36 @@ public class Client extends PacketHandler implements Runnable {
             datagramSocket = new DatagramSocket();
             IP = InetAddress.getLocalHost();
         } catch (IOException e) {
-            System.out.println("Connection problem");
+            System.out.println("Connection problem, cannot make socket.");
         }
     }
 
+    /**
+     * initialises connection with the server
+     * @return true if successful
+     */
     private boolean initialiseConnection() {
         int response;
-        ByteUtil bytes;
+        ByteModel bytes;
         do {
-            send(datagramSocket, JOIN_SIGNAL, 0, IP, Server.PORT_NUMBER);
-            bytes = new ByteUtil(receive(datagramSocket).getData());
+            if (game.isSpectate()) {
+                send(datagramSocket, SPECTATE_SIGNAL, 0, IP, Server.PORT_NUMBER);
+            }
+            if (game.isClient()) {
+                send(datagramSocket, JOIN_SIGNAL, 0, IP, Server.PORT_NUMBER);
+            }
+            bytes = new ByteModel(receive(datagramSocket).getData());
             response = bytes.getInt();
-            System.out.println(response);
             if (response < 0) return false;
         } while (response != RECEIVED_SIGNAL);
         game.getSpaceship().setID(bytes.getInt());
         return true;
     }
 
+    /**
+     * maintains connection by sending maintain signals to the server and
+     * load the game based on the instructions of the server.
+     */
     @Override
     public void run() {
         if (!initialiseConnection()) {
@@ -52,9 +70,12 @@ public class Client extends PacketHandler implements Runnable {
         }
         running = true;
         while (running) {
-            send(datagramSocket, MAINTAIN_SIGNAL, 0, IP, Server.PORT_NUMBER);
-            game.loadGame(receiveGame(datagramSocket));
-            System.out.println("NEXT BIG THING");
+            send(datagramSocket, MAINTAIN_SIGNAL, game.getSpaceship().getInputValue(), IP, Server.PORT_NUMBER);
+            ByteModel bytes = new ByteModel(receiveBytes(datagramSocket));
+            if (bytes.getInt() == GAME_SIGNAL) {
+                bytes.loadGame(game);
+                game.notifyListeners(0L);
+            }
         }
     }
 }

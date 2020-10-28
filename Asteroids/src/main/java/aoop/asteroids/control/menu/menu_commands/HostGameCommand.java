@@ -1,14 +1,23 @@
 package aoop.asteroids.control.menu.menu_commands;
 
-import aoop.asteroids.control.menu.MenuItemCommand;
 import aoop.asteroids.model.GameServer;
 
-public class HostGameCommand extends MenuCommand {
+/**
+ * Command for hosting the game
+ */
+public class HostGameCommand extends AbstractMenuCommand {
 
+    /**
+     * Constructor
+     * @param gs game server running the game
+     */
     public HostGameCommand(GameServer gs) {
         super(gs);
     }
 
+    /**
+     * Restarts the game and sets host flag
+     */
     @Override
     public void execute() {
         super.execute();

@@ -12,9 +12,9 @@ import static java.lang.Math.PI;
  * View model for displaying a spaceship object.
  */
 public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
+
 	/**
 	 * Constructs a new view model with the given game object.
-	 *
 	 * @param gameObject The object that will be displayed when this view model is drawn.
 	 */
 	public SpaceshipViewModel(Spaceship gameObject) {
@@ -23,7 +23,6 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 
 	/**
 	 * Draws the game object that was given to this view model.
-	 *
 	 * @param graphics2D The graphics object which provides the necessary drawing methods.
 	 * @param location The location at which to draw the spaceship.
 	 */
@@ -38,7 +37,6 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 
 	/**
 	 * Draws the main body of the spaceship as a white triangle.
-	 *
 	 * @param spaceship The spaceship object to draw. While we could retrieve this from this.getGameObject(), it is a
 	 *                  little easier to read this way.
 	 * @param graphics2D The graphics object to use when drawing.
@@ -61,7 +59,6 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 
 	/**
 	 * Draws the exhaust of the spaceship as a small yellow triangle.
-	 *
 	 * @param spaceship The spaceship whose exhaust to draw.
 	 * @param graphics2D The graphics object to use when drawing.
 	 * @param location The location at which to draw the spaceship.
@@ -81,7 +78,6 @@ public class SpaceshipViewModel extends GameObjectViewModel<Spaceship> {
 	/**
 	 * Builds a triangle shape using a starting location, direction, and three polar coordinates that define the corners
 	 * of the triangle.
-	 *
 	 * @param location The location at which to center the triangle. This can be treated as the origin for the polar
 	 *                 coordinates.
 	 * @param facingDirection The direction that the triangle is facing, in radians. This essentially works as an offset

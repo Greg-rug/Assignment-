@@ -38,7 +38,6 @@ public abstract class GameObject {
 
 	/**
 	 * Constructs a new game object with the specified location, velocity and radius.
-	 *
 	 * @param locationX The object's location on the x-axis.
 	 * @param locationY The object's location on the y-axis.
 	 * @param velocityX Velocity in X direction.
@@ -62,6 +61,15 @@ public abstract class GameObject {
 		this(location.getX(), location.getY(), velocity.getX(), velocity.getY(), radius);
 	}
 
+	/**
+	 * Constructor for loading
+	 * @param locationX location x of the object
+	 * @param locationY location y of the object
+	 * @param velocityX velocity x of the object
+	 * @param velocityY velocity y of the object
+	 * @param radius radius of the object
+	 * @param steps until collision is possible
+	 */
 	public GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius, int steps) {
 		this(locationX, locationY, velocityX, velocityY, radius);
 		stepsUntilCollisionPossible = steps;
@@ -132,7 +140,6 @@ public abstract class GameObject {
 	 * Given some other game object, this method checks whether the current object and the given object collide with
 	 * each other. It does this by measuring the distance between the objects and checking whether it is larger than the
 	 * sum of the radii. Furthermore both objects should be allowed to collide.
-	 *
 	 * @param other The other object that it may collide with.
 	 * @return True if object collides with given object, false otherwise.
 	 */

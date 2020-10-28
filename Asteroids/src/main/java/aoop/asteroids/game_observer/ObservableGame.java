@@ -11,10 +11,11 @@ import java.util.List;
  * of the Observable class that is suited to the uses of this game.
  */
 public abstract class ObservableGame {
+
 	/**
 	 * The list of listeners that will be notified when the game updates.
 	 */
-	private List<GameUpdateListener> listeners;
+	private final List<GameUpdateListener> listeners;
 
 	/**
 	 * Constructs a new observable game with initially no listeners.

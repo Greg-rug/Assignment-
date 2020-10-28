@@ -2,7 +2,6 @@ package aoop.asteroids.model.game;
 
 import aoop.asteroids.control.GameUpdater;
 import aoop.asteroids.game_observer.ObservableGame;
-import aoop.asteroids.util.ByteUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -51,11 +50,25 @@ public class Game extends ObservableGame {
 	 */
 	private boolean spectate;
 
+	/**
+	 * Indicates if the game should behave as a host
+	 */
 	private boolean host;
 
+	/**
+	 * Indicates if the game should behave as a client
+	 */
 	private boolean client;
 
-	private int lastTick;
+	/**
+	 * last tick of game updater
+	 */
+	private int lastLocalTick;
+
+	/**
+	 * if client, last received tick from the server
+	 */
+	private int lastReceivedTick;
 
 	/**
 	 * The game updater thread, which is responsible for updating the game's state as time goes on.
@@ -67,15 +80,6 @@ public class Game extends ObservableGame {
 	 */
 	public Game() {
 		initializeGameData();
-	}
-
-	public void reset() {
-		asteroidsOnly = false;
-		spectate = false;
-		running = false;
-		host = false;
-		client = false;
-		lastTick = 0;
 	}
 
 	/**
@@ -91,39 +95,36 @@ public class Game extends ObservableGame {
 		else {
 			spaceship = new Spaceship();
 		}
-		bullets = new ArrayList<>();
-		asteroids = new ArrayList<>();
-		spaceships = new ArrayList<>();
+		resetLists();
 		spaceships.add(spaceship);
 	}
 
-	public void loadGame(byte[] array) {
-		quit();
-		Spaceship spaceship;
-		if (spaceships != null && spaceships.size() > 0) spaceship = spaceships.get(0);
-		else spaceship = new Spaceship();
+	/**
+	 * resets flags and counters
+	 */
+	public void reset() {
+		asteroidsOnly = false;
+		spectate = false;
+		running = false;
+		host = false;
+		client = false;
+		lastLocalTick = 0;
+		lastReceivedTick = 0;
+	}
+
+	/**
+	 * resets collections for game objects
+	 */
+	public void resetLists() {
 		bullets = new ArrayList<>();
 		asteroids = new ArrayList<>();
 		spaceships = new ArrayList<>();
-		spaceships.add(spaceship);
-		ByteUtil bytes = new ByteUtil(array);
-		spaceship.setID(bytes.getInt());
-		int length = bytes.getByte();
-		for (int i = 0; i < length; i++) {
-			Spaceship newShip = bytes.getSpaceship();
-			if (newShip.getID() != spaceship.getID()) spaceships.add(newShip);
-		}
-		length = bytes.getByte();
-		for (int i = 0; i < length; i++) {
-			asteroids.add(bytes.getAsteroid());
-		}
-		length = bytes.getByte();
-		for (int i = 0; i < length; i++) {
-			bullets.add(bytes.getBullet());
-		}
-		start();
 	}
 
+	/**
+	 * adds another spaceship to the game
+	 * @return id of the spaceship
+	 */
 	public int addSpaceShip() {
 		Point.Double freeLocation = findFreeLocation();
 		if (freeLocation == null) return - 1;
@@ -149,26 +150,25 @@ public class Game extends ObservableGame {
 	 */
 	public void quit() {
 		if (running) {
-			/*
-			try { // Attempt to wait for the game updater to exit its game loop.
-				gameUpdaterThread.join(100);
-			} catch (InterruptedException exception) {
-				System.err.println("Interrupted while waiting for the game updater thread to finish execution.");
-			} finally {
-
-			 */
 			running = false;
+			gameUpdaterThread.interrupt();
 			gameUpdaterThread = null; // Throw away the game updater thread and let the GC remove it.
-		//}
 		}
 	}
 
+	/**
+	 * restarts the game
+	 */
 	public void restart() {
 		quit();
 		initializeGameData();
 		start();
 	}
 
+	/**
+	 * finds free location for the spaceship
+	 * @return free location as Point2D.Double
+	 */
 	private Point2D.Double findFreeLocation() {
 		ThreadLocalRandom rng = ThreadLocalRandom.current();
 		Point.Double newLocation;
@@ -217,38 +217,69 @@ public class Game extends ObservableGame {
 		return bullets;
 	}
 
+	/**
+	 * @return spaceships
+	 */
 	public ArrayList<Spaceship> getSpaceships() {
 		return spaceships;
 	}
 
+	/**
+	 * @return asteroidsOnly
+	 */
 	public boolean isAsteroidsOnly() {
 		return asteroidsOnly;
 	}
 
+	/**
+	 * @return spectate
+	 */
 	public boolean isSpectate() {
 		return spectate;
 	}
 
+	/**
+	 * @return host
+	 */
 	public boolean isHost() {
 		return host;
 	}
 
+	/**
+	 * @return client
+	 */
 	public boolean isClient() {
 		return client;
 	}
 
+	/**
+	 * setter for asteroidsOnly
+	 * @param asteroidsOnly to be set
+	 */
 	public void setAsteroidsOnly(boolean asteroidsOnly) {
 		this.asteroidsOnly = asteroidsOnly;
 	}
 
+	/**
+	 * setter for spectate
+	 * @param spectate to be set
+	 */
 	public void setSpectate(boolean spectate) {
 		this.spectate = spectate;
 	}
 
+	/**
+	 * setter for host
+	 * @param host to be set
+	 */
 	public void setHost(boolean host) {
 		this.host = host;
 	}
 
+	/**
+	 * setter for client
+	 * @param client to be set
+	 */
 	public void setClient(boolean client) {
 		this.client = client;
 	}
@@ -264,14 +295,37 @@ public class Game extends ObservableGame {
 	 * @return True if the player's ship has been destroyed, or false otherwise.
 	 */
 	public boolean isGameOver() {
+		if (getSpaceship() == null) return false;
 		return getSpaceship().isDestroyed();
 	}
 
-	public int getLastTick() {
-		return lastTick;
+	/**
+	 * @return lastLocalTick
+	 */
+	public int getLastLocalTick() {
+		return lastLocalTick;
 	}
 
-	public void setLastTick(int lastTick) {
-		this.lastTick = lastTick;
+	/**
+	 * setter for lastLocalTick
+	 * @param lastLocalTick to be set
+	 */
+	public void setLastLocalTick(int lastLocalTick) {
+		this.lastLocalTick = lastLocalTick;
+	}
+
+	/**
+	 * @return lastReceivedTick
+	 */
+	public int getLastReceivedTick() {
+		return lastReceivedTick;
+	}
+
+	/**
+	 * setter for lastReceivedTick
+	 * @param lastReceivedTick to be set
+	 */
+	public void setLastReceivedTick(int lastReceivedTick) {
+		this.lastReceivedTick = lastReceivedTick;
 	}
 }
