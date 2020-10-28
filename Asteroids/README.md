@@ -23,7 +23,7 @@
 
 ## About The Project
 
-<!-- Add short description about the project here -->
+<!-- This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding to it a multiplayer aspect to it besides it's regular single-player features. -->
 
 ### Built With
 
@@ -65,13 +65,17 @@ The JAR file will appear in the `/target` directory.
 Describe your program's structure (classes and packages) in detail, addressing all but the most trivial features, and provide ample reasoning for why you chose a certain structure, or why you implemented something a certain way. What design patterns did you use? Describe how and where they've been applied. And finally, how does your game handle networking? Give a description of the protocol or messages that the clients use to communicate with servers. Including a diagram here can help! 
 <!-- Write this section yourself -->
 Expected length: as much as you need to explain the above. This will likely be the longest section (it is also the most important one).
-
+<!-- The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything pertaining to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. In order to implement the   -->
 A good way to split this section would be by packages (e.g. model/view/controller). Then discuss the (functionality of) relevant components in each package and how they interact with each other. Make sure to treat every package/module.
 
-### ExamplePackageA
-
-### ExamplePackageB
-
+### View
+<!---->
+### Model
+<!---->
+### Controller
+<!---->
+### Database 
+<!---->
 ## Evaluation
 
 Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?
@@ -82,6 +86,7 @@ Expected length: ~300-500 words
 
 What did each team member contribute to the assignment? Not just in terms of code, but also more abstractly, such as, "Tom upgraded the game model to support multiple ships.", or "Jerry designed the protocol that clients use for communicating with the server."
 <!-- Write this section yourself -->
+<!-- It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java , as such Lubor would work on uprgading the given code for the assingment in order to implement the required multiplayer aspect, meanwhile Tudor would attempt to create a persistent high score database.  -->
 Expected length: ~150 words.
 
 ## Extras
