@@ -87,7 +87,7 @@ A good way to split this section would be by packages (e.g. model/view/controlle
 ## Evaluation
 
 Discuss the stability of your implementation. What works well? Are there any bugs? Is everything tested properly? Are there still features that have not been implemented? Also, if you had the time, what improvements would you make to your implementation? Are there things which you would have done completely differently?
-<!-- Write this section yourself -->
+<!-- We have not been able to implement a persistent highscore database due to technical issues with utilizing an MySQL server which seemingly does not allow for remote connection of other users to the database despite any attempts of granting server privileges  -->
 Expected length: ~300-500 words
 
 ## Teamwork
