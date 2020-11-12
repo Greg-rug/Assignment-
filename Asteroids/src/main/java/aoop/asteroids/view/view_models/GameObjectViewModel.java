@@ -8,18 +8,17 @@ import java.awt.*;
 /**
  * A view model for a game object is used to transform a game object into something that can be displayed in the view.
  * Child classes can be made to define custom drawing for different game objects.
- *
  * @param <T> The type of game object that a child class will display.
  */
 public abstract class GameObjectViewModel<T extends GameObject> {
+
 	/**
 	 * The object that this view model displays.
 	 */
-	private T gameObject;
+	private final T gameObject;
 
 	/**
 	 * Constructs a new view model with the given game object.
-	 *
 	 * @param gameObject The object that will be displayed when this view model is drawn.
 	 */
 	GameObjectViewModel(T gameObject) {
@@ -28,7 +27,6 @@ public abstract class GameObjectViewModel<T extends GameObject> {
 
 	/**
 	 * Gets the object that was given to this view model.
-	 *
 	 * @return The game object that should be displayed.
 	 */
 	T getGameObject() {
@@ -72,7 +70,6 @@ public abstract class GameObjectViewModel<T extends GameObject> {
 
 	/**
 	 * Draws the game object that was given to this view model.
-	 *
 	 * @param graphics2D The graphics object which provides the necessary drawing methods.
 	 * @param location The location at which to draw the object. Use this instead of the object's actual location, since
 	 *                 this location accounts for the time which has elapsed since the last game tick.

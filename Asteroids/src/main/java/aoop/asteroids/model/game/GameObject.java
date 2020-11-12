@@ -10,6 +10,7 @@ import java.awt.*;
  * velocity.
  */
 public abstract class GameObject {
+
 	/**
 	 * An x and y value pair indicating the object's current location.
 	 */
@@ -18,7 +19,7 @@ public abstract class GameObject {
 	/**
 	 * An x and y value pair indicating the object's current velocity, in pixels per game tick.
 	 */
-	private Point.Double velocity;
+	private final Point.Double velocity;
 
 	/** Radius of the object. */
 	private final double radius;
@@ -37,14 +38,13 @@ public abstract class GameObject {
 
 	/**
 	 * Constructs a new game object with the specified location, velocity and radius.
-	 *
 	 * @param locationX The object's location on the x-axis.
 	 * @param locationY The object's location on the y-axis.
 	 * @param velocityX Velocity in X direction.
 	 * @param velocityY Velocity in Y direction.
 	 * @param radius Radius of the object.
 	 */
-	protected GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius) {
+	public GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius) {
 		location = new Point.Double(locationX, locationY);
 		velocity = new Point.Double(velocityX, velocityY);
 		this.radius = radius;
@@ -53,13 +53,26 @@ public abstract class GameObject {
 
 	/**
 	 * A convenience constructor that accepts points instead of individual coordinates.
-	 *
 	 * @param location A point representing the x- and y-coordinates of the object's location.
 	 * @param velocity A point representing the object's speed on both the x and y axes.
 	 * @param radius The radius of the object.
 	 */
-	protected GameObject(Point.Double location, Point.Double velocity, double radius) {
+	public GameObject(Point.Double location, Point.Double velocity, double radius) {
 		this(location.getX(), location.getY(), velocity.getX(), velocity.getY(), radius);
+	}
+
+	/**
+	 * Constructor for loading
+	 * @param locationX location x of the object
+	 * @param locationY location y of the object
+	 * @param velocityX velocity x of the object
+	 * @param velocityY velocity y of the object
+	 * @param radius radius of the object
+	 * @param steps until collision is possible
+	 */
+	public GameObject(double locationX, double locationY, double velocityX, double velocityY, double radius, int steps) {
+		this(locationX, locationY, velocityX, velocityY, radius);
+		stepsUntilCollisionPossible = steps;
 	}
 
 	/**
@@ -98,6 +111,14 @@ public abstract class GameObject {
 	}
 
 	/**
+	 * setter for location
+	 * @param location to be set
+	 */
+	public void setLocation(Point.Double location) {
+		this.location = location;
+	}
+
+	/**
 	 * @return The current velocity of this object.
 	 */
 	public Point.Double getVelocity() {
@@ -109,6 +130,10 @@ public abstract class GameObject {
 	 */
 	public double getSpeed() {
 		return getVelocity().distance(0, 0); // A cheap trick: distance() is doing Math.sqrt(px * px + py * py) internally.
+	}
+
+	public int getStepsUntilCollisionPossible() {
+		return stepsUntilCollisionPossible;
 	}
 
 	/**
@@ -123,7 +148,6 @@ public abstract class GameObject {
 	 * Given some other game object, this method checks whether the current object and the given object collide with
 	 * each other. It does this by measuring the distance between the objects and checking whether it is larger than the
 	 * sum of the radii. Furthermore both objects should be allowed to collide.
-	 *
 	 * @param other The other object that it may collide with.
 	 * @return True if object collides with given object, false otherwise.
 	 */

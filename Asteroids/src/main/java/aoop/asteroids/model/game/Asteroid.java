@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * when that one is destroyed.
  */
 public class Asteroid extends GameObject {
+
 	/**
 	 * By how much (both positive and negative) can the successor asteroids that spawn when an asteroid is destroyed
 	 * vary in velocity compared to their parent.
@@ -20,12 +21,11 @@ public class Asteroid extends GameObject {
 	/**
 	 * The size of this asteroid.
 	 */
-	private AsteroidSize size;
+	private final AsteroidSize size;
 
     /**
      * Constructs a new asteroid at the specified location, with specified velocities in both X and Y direction and the
 	 * specified radius.
-     *
      * @param location the location in which to spawn an asteroid.
 	 * @param velocity The velocity of the asteroid.
      * @param size The size of the asteroid.
@@ -36,9 +36,33 @@ public class Asteroid extends GameObject {
 	}
 
 	/**
+	 * Constructor for loading
+	 * @param locationX location x of the object
+	 * @param locationY location y of the object
+	 * @param velocityX velocity x of the object
+	 * @param velocityY velocity y of the object
+	 * @param radius radius of the object
+	 * @param steps until collision is possible
+	 */
+	public Asteroid(double locationX, double locationY, double velocityX, double velocityY, double radius, int steps) {
+		super(locationX, locationY, velocityX, velocityY, radius, steps);
+		int r = (int) radius;
+		switch (r) {
+			case 40: {
+				size = AsteroidSize.LARGE;
+				break;
+			}
+			case 20: {
+				size = AsteroidSize.MEDIUM;
+				break;
+			}
+			default: size = AsteroidSize.SMALL;
+		}
+	}
+
+	/**
 	 * Generates some asteroids that spawn as a result of the destruction of this asteroid. Some sizes of asteroids may
 	 * not produce any successors because they're too small.
-	 *
 	 * @return A collection of the successors.
 	 */
 	public Collection<Asteroid> getSuccessors() {
@@ -48,16 +72,13 @@ public class Asteroid extends GameObject {
 			successors.add(generateSuccessor());
 			successors.add(generateSuccessor());
 		}
-
 		return successors;
 	}
 
 	/**
 	 * Generates a new asteroid that should be spawned when this one is destroyed.
-	 *
 	 * The asteroid is created at the same location as the current one, and is one size smaller. The new asteroid's
 	 * velocity is set to the current asteroid's velocity, with some random speed adjustments.
-	 *
 	 * @return A newly created asteroid, if the size of this asteroid allows for successors. Otherwise null.
 	 */
 	private Asteroid generateSuccessor() {

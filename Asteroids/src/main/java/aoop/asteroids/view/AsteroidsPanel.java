@@ -3,7 +3,11 @@ package aoop.asteroids.view;
 import aoop.asteroids.control.menu.MenuCommandHandler;
 import aoop.asteroids.control.menu.MenuItem;
 import aoop.asteroids.game_observer.GameUpdateListener;
+import aoop.asteroids.model.GameServer;
+import aoop.asteroids.model.game.Asteroid;
+import aoop.asteroids.model.game.Bullet;
 import aoop.asteroids.model.game.Game;
+import aoop.asteroids.model.game.Spaceship;
 import aoop.asteroids.view.view_models.AsteroidViewModel;
 import aoop.asteroids.view.view_models.BulletViewModel;
 import aoop.asteroids.view.view_models.SpaceshipViewModel;
@@ -19,15 +23,25 @@ import java.util.Collection;
  * The panel at the center of the game's window which is responsible for the custom drawing of game objects.
  */
 public class AsteroidsPanel extends JPanel implements GameUpdateListener {
+
 	/**
 	 * The x- and y-coordinates of the score indicator.
 	 */
 	private static final Point SCORE_INDICATOR_POSITION = new Point(20, 20);
 
+	/**
+	 * ratio of width used for manu items
+	 */
 	private static final double WIDTH_RATIO = 0.3;
 
+	/**
+	 * menu font
+	 */
 	private static final Font MENU_FONT = new Font("Helvetica", Font.BOLD, 24);
 
+	/**
+	 * command handler for menu item actions
+	 */
 	private final MenuCommandHandler commandHandler;
 
 	/**
@@ -41,25 +55,26 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 	 */
 	private long timeSinceLastTick = 0L;
 
+	/**
+	 * pairs of models and corresonding items for menu
+	 */
 	private Collection<Pair<Shape,MenuItem>> menuItems;
 
-	/** 
+	/**
 	 * Constructs a new game panel, based on the given model. Also starts listening to the game to check for updates, so
-	 * that it can repaint itself if necessary.
-	 *
-	 * @param game The model which will be drawn in this panel.
+	 *  that it can repaint itself if necessary.
+	 * @param gs geme server
 	 */
-	AsteroidsPanel(Game game) {
+	AsteroidsPanel(GameServer gs) {
 		initialiseMenuItems();
-		commandHandler = new MenuCommandHandler(game);
-		this.game = game;
-		this.game.addListener(this);
+		commandHandler = new MenuCommandHandler(gs);
+		game = gs.getGame();
+		game.addListener(this);
 	}
 	
 	/**
 	 * The method provided by JPanel for 'painting' this component. It is overridden here so that this panel can define
 	 * some custom drawing. By default, a JPanel is just an empty rectangle.
-	 *
 	 * @param graphics The graphics object that exposes various drawing methods to use.
 	 */
 	@Override
@@ -70,7 +85,6 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 		you will likely see visual artifacts." Just a little FYI.
 		 */
 		super.paintComponent(graphics);
-
 		// The Graphics2D class offers some more advanced options when drawing, so before doing any drawing, this is obtained simply by casting.
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		// Set some key-value options for the graphics object. In this case, this just sets antialiasing to true.
@@ -85,7 +99,6 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 
 	/**
 	 * Draws the ship's score and energy.
-	 *
 	 * @param graphics2D The graphics object that provides the drawing methods.
 	 */
 	private void drawShipInformation(Graphics2D graphics2D) {
@@ -102,7 +115,6 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 
 	/**
 	 * Draws all of the game's objects. Wraps each object in a view model, then uses that to draw the object.
-	 *
 	 * @param graphics2D The graphics object that provides the drawing methods.
 	 */
 	private synchronized void drawGameObjects(Graphics2D graphics2D) {
@@ -112,13 +124,22 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 		 * were in the middle of drawing while the game engine starts a new physics update.
 		 */
 		synchronized (game) {
-			if (!game.isAsteroidsOnly())
-				game.getSpaceships().forEach(ship -> new SpaceshipViewModel(ship).drawObject(graphics2D, timeSinceLastTick));
-			game.getAsteroids().forEach(asteroid -> new AsteroidViewModel(asteroid).drawObject(graphics2D, timeSinceLastTick));
-			game.getBullets().forEach(bullet -> new BulletViewModel(bullet).drawObject(graphics2D, timeSinceLastTick));
+			if (!game.isAsteroidsOnly()) {
+				ArrayList<Spaceship> ships = new ArrayList<>(game.getSpaceships());
+				if (game.isSpectate()) ships.remove(0);
+				ships.forEach(ship -> new SpaceshipViewModel(ship).drawObject(graphics2D, timeSinceLastTick));
+			}
+			Collection<Asteroid> as = new ArrayList<>(game.getAsteroids());
+			as.forEach(asteroid -> new AsteroidViewModel(asteroid).drawObject(graphics2D, timeSinceLastTick));
+			Collection<Bullet> bs = new ArrayList<>(game.getBullets());
+			bs.forEach(bullet -> new BulletViewModel(bullet).drawObject(graphics2D, timeSinceLastTick));
 		}
 	}
 
+	/**
+	 * Draws the menu
+	 * @param g The graphics object that provides the drawing methods.
+	 */
 	private void drawMainMenu(Graphics2D g) {
 		g.setStroke(new BasicStroke(6));
 		g.setColor(Color.WHITE);
@@ -128,6 +149,12 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 		}
 	}
 
+	/**
+	 * This method draws name of menu item inside the shape
+	 * @param g The graphics object that provides the drawing methods.
+	 * @param shape shape to be drawn
+	 * @param menuItem menu item to be drawn
+	 */
 	private void drawString(Graphics2D g, Shape shape, MenuItem menuItem) {
 		FontMetrics metrics = g.getFontMetrics(MENU_FONT);
 		int x = shape.getBounds().x + (shape.getBounds().width - metrics.stringWidth(menuItem.getTitle())) / 2;
@@ -136,6 +163,9 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 		g.drawString(menuItem.getTitle(), x, y);
 	}
 
+	/**
+	 * This method calculates positions in menu
+	 */
 	private void initialiseMenuItems() {
 		menuItems = new ArrayList<>();
 		int width = (int) (AsteroidsFrame.WINDOW_SIZE.width * WIDTH_RATIO);
@@ -150,7 +180,6 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 
 	/**
 	 * Do something when the game has indicated that it is updated. For this panel, that means redrawing.
-	 *
 	 * @param timeSinceLastTick The number of milliseconds since the game's physics were updated. This is used to allow
 	 *                          objects to continue to appear animated between each game tick.
 	 *
@@ -163,14 +192,23 @@ public class AsteroidsPanel extends JPanel implements GameUpdateListener {
 		repaint();
 	}
 
+	/**
+	 * @return shape-menu item pairs collection
+	 */
 	public Collection<Pair<Shape, MenuItem>> getMenuItems() {
 		return menuItems;
 	}
 
+	/**
+	 * @return menu command handler
+	 */
 	public MenuCommandHandler getCommandHandler() {
 		return commandHandler;
 	}
 
+	/**
+	 * @return game
+	 */
 	public Game getGame() {
 		return game;
 	}

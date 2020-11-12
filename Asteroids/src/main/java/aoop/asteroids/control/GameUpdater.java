@@ -3,7 +3,6 @@ package aoop.asteroids.control;
 import aoop.asteroids.model.game.*;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,17 +13,18 @@ import java.util.concurrent.ThreadLocalRandom;
  * to the game model as a result of user input, and this class also defines the very important game loop itself.
  */
 public class GameUpdater implements Runnable {
+
     /**
      * The refresh rate of the display, in frames per second. Increasing this number makes the game look smoother, up to
      * a certain point where it's no longer noticeable.
      */
-    private static final int DISPLAY_FPS = 20;
+    private static final int DISPLAY_FPS = 30;
 
     /**
      * The rate at which the game ticks (how often physics updates are applied), in frames per second. Increasing this
      * number speeds up everything in the game. Ships react faster to input, bullets fly faster, etc.
      */
-    private static final int PHYSICS_FPS = 20;
+    private static final int PHYSICS_FPS = 30;
 
     /**
      * The number of milliseconds in a game tick.
@@ -34,7 +34,7 @@ public class GameUpdater implements Runnable {
     /**
      * The default maximum number of asteroids that may be present in the game when starting.
      */
-    private static final int ASTEROIDS_LIMIT_DEFAULT = 10;
+    private static final int ASTEROIDS_LIMIT_DEFAULT = 7;
 
     /**
      * Set this to true to allow asteroids to collide with each other, potentially causing chain reactions of asteroid
@@ -60,7 +60,6 @@ public class GameUpdater implements Runnable {
 
     /**
      * Constructs a new game updater with the given game.
-     *
      * @param game The game that this updater will update when it's running.
      */
     public GameUpdater(Game game) {
@@ -71,7 +70,6 @@ public class GameUpdater implements Runnable {
 
     /**
      * The main game loop.
-     * <p>
      * Starts the game updater thread. This will run until the quit() method is called on this updater's game object.
      */
     @Override
@@ -103,23 +101,20 @@ public class GameUpdater implements Runnable {
 
     /**
      * Called every game tick, to update all of the game's model objects.
-     * <p>
      * First, each object's movement is updated by calling nextStep() on it.
      * Then, if the player is pressing the key to fire the ship's weapon, a new bullet should spawn.
      * Then, once all objects' positions are updated, we check for any collisions between them.
      * And finally, any objects which are destroyed by collisions are removed from the game.
-     * <p>
      * Also, every 200 game ticks, if possible, a new random asteroid is added to the game.
      */
     private void updatePhysics() {
         Collection<Bullet> bullets = game.getBullets();
         Collection<Asteroid> asteroids = game.getAsteroids();
-
+        Collection<Spaceship> spaceships = game.getSpaceships();
         asteroids.forEach(GameObject::nextStep);
         bullets.forEach(GameObject::nextStep);
-
-        if (!game.isAsteroidsOnly()) {
-            game.getSpaceships().forEach(ship -> {
+        if (!game.isAsteroidsOnly() && !game.isSpectate()) {
+            spaceships.forEach(ship -> {
                 ship.nextStep();
                 if (ship.canFireWeapon()) {
                     double direction = ship.getDirection();
@@ -132,14 +127,16 @@ public class GameUpdater implements Runnable {
                 }
             });
         }
-        checkCollisions();
-        removeDestroyedObjects();
-
+        if (!game.isSpectate()) {
+            checkCollisions();
+            removeDestroyedObjects();
+        }
         // Every 200 game ticks, try and spawn a new asteroid.
-        if (updateCounter % 200 == 0 && asteroids.size() < asteroidsLimit) {
+        if (updateCounter % 200 == 0 && asteroids.size() < asteroidsLimit && !game.isSpectate() && !game.isClient()) {
             addRandomAsteroid();
         }
         updateCounter++;
+        game.setLastLocalTick(updateCounter);
     }
 
     /**
@@ -162,6 +159,10 @@ public class GameUpdater implements Runnable {
         game.getAsteroids().add(new Asteroid(newAsteroidLocation, randomVelocity, randomSize));
     }
 
+    /**
+     * finds a point where asteroid can spawn
+     * @return point where asteroid can spawn
+     */
     private Point.Double findAsteroidPoint() {
         ThreadLocalRandom rng = ThreadLocalRandom.current();
         Point.Double newAsteroidLocation;
@@ -241,7 +242,6 @@ public class GameUpdater implements Runnable {
 
     /**
      * Removes all destroyed objects (those which have collided with another object).
-     * <p>
      * When an asteroid is destroyed, it may spawn some smaller successor asteroids, and these are added to the game's
      * list of asteroids.
      */

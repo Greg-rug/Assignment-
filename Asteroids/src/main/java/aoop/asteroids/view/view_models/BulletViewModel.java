@@ -9,9 +9,9 @@ import java.awt.geom.Ellipse2D;
  * View model for displaying bullet objects.
  */
 public class BulletViewModel extends GameObjectViewModel<Bullet> {
+
 	/**
 	 * Constructs the view model.
-	 *
 	 * @param gameObject The bullet to be displayed.
 	 */
 	public BulletViewModel(Bullet gameObject) {
@@ -20,7 +20,6 @@ public class BulletViewModel extends GameObjectViewModel<Bullet> {
 
 	/**
 	 * Draws the bullet that was given to this view model.
-	 *
 	 * @param graphics2D The graphics object which provides the necessary drawing methods.
 	 * @param location The location at which to draw the object.
 	 */

@@ -4,6 +4,7 @@ import aoop.asteroids.control.*;
 import aoop.asteroids.control.menu.MenuCommandHandler;
 import aoop.asteroids.control.menu.MenuItem;
 import aoop.asteroids.control.menu.MenuItemAction;
+import aoop.asteroids.model.GameServer;
 import aoop.asteroids.model.game.Game;
 import aoop.asteroids.view.AsteroidsFrame;
 import aoop.asteroids.view.AsteroidsPanel;
@@ -41,13 +42,11 @@ public class Asteroids {
 		if (System.getProperty("os.name").contains("Mac")) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-
 		// Create the game model and display frame.
-		Game game = new Game();
-		AsteroidsFrame frame = new AsteroidsFrame(game);
-
+		GameServer gs = new GameServer();
+		AsteroidsFrame frame = new AsteroidsFrame(gs);
 		// Generate a new action event so that we can use the NewGameAction to start a new game.
-		new MenuItemAction(new MenuCommandHandler(game)).actionPerformed(
+		new MenuItemAction(new MenuCommandHandler(gs)).actionPerformed(
 				new ActionEvent(frame, ActionEvent.ACTION_PERFORMED, MenuItem.MAIN_MENU.toString()));
 	}
 }

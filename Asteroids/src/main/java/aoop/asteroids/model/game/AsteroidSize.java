@@ -4,6 +4,7 @@ package aoop.asteroids.model.game;
  * This enumeration defines the different possible sizes of asteroids.
  */
 public enum AsteroidSize {
+
 	SMALL(10),
 	MEDIUM(20),
 	LARGE(40);
@@ -11,7 +12,7 @@ public enum AsteroidSize {
 	/**
 	 * The radius that each different asteroid size is.
 	 */
-	private double radius;
+	private final double radius;
 
 	/**
 	 * Constructor that requires that any new enumeration values provide a valid radius.

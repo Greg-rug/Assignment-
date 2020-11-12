@@ -26,7 +26,7 @@
 
 ## About The Project
 
-This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding to it a multiplayer aspect to it besides it's regular single-player features.
+This projects aims to recreate the classic "Asteroids" arcade game, whose objective is to shoot as many asteroids as possible without the player crashing his ship , while also adding a multiplayer aspect to it besides it's regular single-player features.
 
 ### Built With
 
@@ -81,7 +81,6 @@ Once you have done all of the above and exit the `Project Structure` tab , you s
 
 
 ## Design Description
-
 The project as a whole follows the MVC design pattern with some deviations in order to accommodate the different features of the game. Anything related to the game's model is found in the model package, view things such as Swing UI components are found in the view package, and you'll find controllers in the control package. The project also employs an Observer pattern so that when a game changes state, all registered observers are notified and updated automatically.
 
 ### View
@@ -101,11 +100,11 @@ The controller responds to the user input and performs interactions on the data 
 The observer pattern utilized for the game can be found in the game_observer package which contains the GameUpdateListener which ensures that all classes that implement this interface should be notified when a game is updated, meanwhile the ObservableGame class indicates that an observable game is an object that game update listeners can register to, so that when the game updates, they will be able to react to it.
 
 ### Util 
-In this package there are the classes are some utility classes: Pair groups 2 different generic objects into a pair and PolarCoordinate enables view to draw spaceship in the proper direction.
+In this package there are the classes are some utility classes: Pair groups 2 different generic objects into a pair and PolarCoordinate enables view to draw spaceship in the proper direction. In this package there is ScoreDB class as well, which is class for Database on using MySQL.
 
 ## Evaluation
 The biggest strength of our project is main menu and menu bar. The code is clear, the view looks very pretty and its functionality works really good as well. On the other hand, we have not been able to implement several thing in a way we would like. Persistent highscore database is not integrated into the model due to technical issues with utilizing an MySQL server which seemingly does not allow for remote connection of other users to the database despite any attempts of granting server privileges, however, the classes for the database are still included in the package database. 
-If we were to start agian, we would deal with multiple spaceships in a different way. In our current implementation there is an ArrayList of all spaceships including the clients' and hosts. Initially this implementation seemed great, because of less code-consuming collision detection and drawing. However, later on when implementing multiplayer features it caused a lot of trouble of properly identifiyng which ship is client's and which one is hosts. Due to these problems, multiplayer features don't have expected results. If we had more time, we would add another command pattern for signals, that are defined in the Client class, so we could avoid many consequent if statements in the Server class.
+If we were to start agian, we would deal with multiple spaceships in a different way. In our current implementation game stores spaceships as ArrayList of all spaceships including the clients' and hosts. Initially this implementation seemed great, because of less code-consuming collision detection and drawing. However, later on when implementing multiplayer features it caused a lot of trouble of properly identifiyng which ship is client's and which one is hosts. Due to these problems, multiplayer has features as invisible spaceships for the client, but for the host everything is fine. If we had more time, we would add another command pattern for signals, that are defined in the Client class, so we could avoid many consequent if statements in the Server class.
 
 ## Teamwork
 It was agreed upon before the beginning working on the project that each member would work to implement different parts of the program depending on their skills and experience with Java, as such Lubor would work on upgrading the given code for the assingment in order to implement the required multiplayer aspects, meanwhile Tudor would attempt to create a persistent high score database. Tudor established a connection to an MySQL server in order to store the names of players and how many points they would obtain in a game. From there he implemented several methods that would allow the creation and maniputation of a data table where the varibles are stored. The methods Tudor implemented allowed for updating specific rows based upon a provided identifier, selecting all the elements in the table to print or selecting all the items ordered in a descending manner based upon the points column and allowing the creation of a table High Scores if one does not already exist in the database.

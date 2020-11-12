@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
  * This class is responsible for handling keyboard input for a single player that is bound to a ship.
  */
 public class PlayerKeyListener implements KeyListener {
+
 	/**
 	 * The key that, when pressed, causes the ship to accelerate.
 	 */
@@ -44,7 +45,6 @@ public class PlayerKeyListener implements KeyListener {
 
 	/**
 	 * This method is invoked when a key is pressed and sets the corresponding fields in the spaceship to true.
-	 *
 	 * @param event Key event that triggered the method.
 	 */
 	@Override
@@ -66,7 +66,6 @@ public class PlayerKeyListener implements KeyListener {
 
 	/**
 	 * This method is invoked when a key is released and sets the corresponding fields in the spaceship to false.
-	 *
 	 * @param event Key event that triggered the method.
 	 */
 	@Override
@@ -89,7 +88,6 @@ public class PlayerKeyListener implements KeyListener {
 	/**
 	 * This method doesn't do anything, but we must provide an empty implementation to satisfy the contract of the
 	 * KeyListener interface.
-	 *	
 	 * @param event Key event that triggered the method.
 	 */
 	@Override

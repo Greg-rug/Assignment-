@@ -5,6 +5,7 @@ package aoop.asteroids.game_observer;
  * implement the onGameUpdated() method to do something when the game is updated.
  */
 public interface GameUpdateListener {
+
 	/**
 	 * This method is called when the game that this listener is listening to announces that it should update.
 	 *
