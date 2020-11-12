@@ -18,7 +18,7 @@ public enum CommandArgument {
 
     /**
      * Constructor
-     * @param isArgument if true it exists and is in use , otherwise it is neither
+     * @param isArgument if true it exists and it is implemented , otherwise it is former
      * @param title of the menu item
      * @param ID of the menu item
      */
