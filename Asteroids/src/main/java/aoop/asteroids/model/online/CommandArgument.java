@@ -56,7 +56,7 @@ public enum CommandArgument {
     }
 
     /**
-     * fins a networking command by it's name
+     * finds a networking command by it's name
      * @param title of the command
      * @return corresponding command argument if it exist, null otherwise
      */
