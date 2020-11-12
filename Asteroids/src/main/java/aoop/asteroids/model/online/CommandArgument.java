@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 /**
- * This is an enum for networking command
+ * This is an enum for networking command and it allows for an easier binding of the signal commands to a hashmap
  */
 public enum CommandArgument {
 
