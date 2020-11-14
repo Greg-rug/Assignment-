@@ -21,6 +21,7 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
 
     private final Game game;
     private final ArrayList<Connection> connections;
+    private final CommandHandler commandHandler;
 
     /**
      * Constructor - sets default values of the fields
@@ -45,27 +46,8 @@ public class Server extends PacketHandler implements GameUpdateListener, Runnabl
                 DatagramPacket dp = receive(ds);
                 ByteModel bytes = new ByteModel(dp.getData());
                 int outcome = bytes.getInt();
-                if (outcome == Client.JOIN_SIGNAL) {
-                    if (findConnection(dp.getAddress()) == null) {
-                        shipID = game.addSpaceShip();
-                        connections.add(new Connection(game, ds, dp, shipID));
-                    }
-                    send(ds, Client.RECEIVED_SIGNAL, shipID, dp.getAddress(), dp.getPort());
-                }
-                if (outcome == Client.MAINTAIN_SIGNAL) {
-                    Connection c = findConnection(dp.getAddress());
-                    moveSpaceship(bytes);
-                    if (c != null) {
-                        c.setLastTick(game.getLastLocalTick());
-                        c.setRunning(true);
-                    }
-                }
-                if (outcome == Client.SPECTATE_SIGNAL) {
-                    if (findConnection(dp.getAddress()) == null) {
-                        connections.add(new Connection(game, ds, dp, -1));
-                    }
-                    send(ds, Client.RECEIVED_SIGNAL, 0, dp.getAddress(), dp.getPort());
-                }
+	            CommandArgument command = commandHandler.getCommand(outcome.getActionCommand());
+                command.execute();
             }
         } catch (IOException e) {
             System.out.println("Connection problem");
